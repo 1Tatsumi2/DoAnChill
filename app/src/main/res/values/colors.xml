@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#181b2c</color>
+    <color name="editText">#292E4B</color>
 </resources>
