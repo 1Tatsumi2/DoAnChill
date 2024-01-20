@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261520140496",
+    "project_id": "chill-8ac86",
+    "storage_bucket": "chill-8ac86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261520140496:android:618c395e8bd2a95404d6d5",
+        "android_client_info": {
+          "package_name": "com.example.doanchill"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyzlh-l1_tTp4nrnx4gnDDZoVX8EIcYGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
