@@ -7,17 +7,15 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/DangnhapVao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="195dp"
-        android:layout_marginEnd="140dp"
-        android:text="@string/log_in"
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="418dp"
+        android:layout_height="736dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.879"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.198" />
+        app:srcCompat="@drawable/logofinal" />
 </androidx.constraintlayout.widget.ConstraintLayout>
