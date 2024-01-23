@@ -32,7 +32,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        Username = findViewById(R.id.username);
         Email = findViewById(R.id.emailid);
         Password = findViewById(R.id.passwordps);
         Confirmpass = findViewById(R.id.confirmpassword);
@@ -41,160 +40,51 @@ public class SignUpActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = Username.getText().toString();
-                String email = Email.getText().toString();
-                String password = Password.getText().toString();
-                String confirmpass = Confirmpass.getText().toString();
-                progressBar.setVisibility(View.VISIBLE);
-                signUpWithFirebase();
-                signup.setEnabled(false);
-                signup.setTextColor(getResources().getColor(R.color.white));
+                String user=Email.getText().toString();
+                String pass=Password.getText().toString();
+                String comfirm=Confirmpass.getText().toString();
+                if(user.isEmpty())
+                {
+                    Email.setError("Email cannot be empty");
+                }
+                if(pass.isEmpty())
+                {
+                    Password.setError("Password cannot be empty");
+                }
+                if(comfirm.isEmpty())
+                {
+                    Password.setError("Confirm password cannot be empty");
+                }
+                if(!comfirm.equals(pass))
+                {
+                    Confirmpass.setError("Password and Confirm password must equal");
+                }
+                else {
+                    mAuth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful())
+                            {
+                                Toast.makeText(SignUpActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                            }
+                            else {
+                                Toast.makeText(SignUpActivity.this,"SignUp Failed" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this,SignInActivity.class);
-                startActivity(intent);
-                finish();
+                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
             }
-        });
-        Username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                CheckInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        Email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                CheckInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        Password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                CheckInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        Confirmpass.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                CheckInputs();
-            }
-        });
-
-    }
-
-    private void signUpWithFirebase()
-    {
-        if(Email.getText().toString().matches("[a-zA-z0-9._-]+@[a-z]+\\.+[a-z]+"))
-        {
-            if(Password.getText().toString().equals(Confirmpass.getText().toString()))
-            {
-                mAuth.createUserWithEmailAndPassword(Email.getText().toString(), Password.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful())
-                                {
-                                    Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else{
-                                    Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            } else {
-                Confirmpass.setError("Password doesn't match.");
-                signup.setEnabled(true);
-                signup.setTextColor(getResources().getColor(R.color.white));
-            }
-        } else {
-            Email.setError("Invalid Email Pattern!");
-            signup.setEnabled(true);
-            signup.setTextColor(getResources().getColor(R.color.white));
-        }
-    }
-
-    private void CheckInputs()
-    {
-        if(!Username.getText().toString().isEmpty())
-        {
-            if(!Email.getText().toString().isEmpty())
-            {
-                if(!Password.getText().toString().isEmpty() && Password.length() >= 6)
-                {
-                    if(!Confirmpass.getText().toString().isEmpty())
-                    {
-                        signup.setEnabled(true);
-                        signup.setTextColor(getResources().getColor(R.color.white));
-                    }
-                    else {
-                        signup.setEnabled(false);
-                        signup.setTextColor(getResources().getColor(R.color.white));
-                    }
-                }
-                else {
-                    signup.setEnabled(false);
-                    signup.setTextColor(getResources().getColor(R.color.white));
-                }
-            }
-            else {
-                signup.setEnabled(false);
-                signup.setTextColor(getResources().getColor(R.color.white));
-            }
-        }
-        else {
-            signup.setEnabled(false);
-            signup.setTextColor(getResources().getColor(R.color.white));
-        }
-
-    }
         });
     }
 }
