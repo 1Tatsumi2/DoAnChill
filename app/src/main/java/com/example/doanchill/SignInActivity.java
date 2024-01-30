@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.doanchill.Fragments.TrangChuFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -55,13 +56,13 @@ public class SignInActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
                                         Toast.makeText(SignInActivity.this,"Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignInActivity.this,MainActivity.class));
+                                        startActivity(new Intent(SignInActivity.this, TrangChuActivity.class));
                                         finish();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(SignInActivity.this,"Login Failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignInActivity.this,"Email or Password is wrong", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     }
