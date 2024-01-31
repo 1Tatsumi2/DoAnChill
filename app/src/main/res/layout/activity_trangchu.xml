@@ -41,34 +41,6 @@
 
     </fragment>
 
-    <fragment
-        android:id="@+id/canhanFragment"
-        class="com.example.doanchill.Fragments.CaNhanFragment"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        app:layout_constraintBottom_toTopOf="@+id/bottomView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_ca_nhan">
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/settingFragment"
-        class="com.example.doanchill.Fragments.SettingsFragment"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        app:layout_constraintBottom_toTopOf="@+id/bottomView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_settings">
-
-    </fragment>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
