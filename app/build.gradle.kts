@@ -25,6 +25,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        buildFeatures{
+            viewBinding =true
+        }
     }
 
     buildFeatures{
@@ -50,4 +53,11 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("com.google.firebase:firebase-analytics")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("io.github.gautamchibde:audiovisualizer:2.2.5")
+    implementation("androidx.palette:palette:1.0.0")
+    implementation("com.github.jgabrielfreitas:BlurImageView:1.0.1")
+    implementation("androidx.media:media:1.7.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+
 }
