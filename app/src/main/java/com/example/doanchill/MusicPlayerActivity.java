@@ -299,7 +299,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         PendingIntent playPendingIntent=PendingIntent.getBroadcast(this,0,playIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         Intent nextIntent=new Intent(this,NotificationReceiver.class).setAction(ACTION_NEXTS);
         PendingIntent nextPendingIntent=PendingIntent.getBroadcast(this,0,nextIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Bitmap picture= BitmapFactory.decodeResource(getResources(),R.drawable.posterbeoi2);
+        Bitmap picture= BitmapFactory.decodeResource(getResources(),R.drawable.img);
         Notification notification=new NotificationCompat.Builder(this,CHANNEL_ID_2)
                 .setSmallIcon(R.drawable.ic_music_note)
                 .setLargeIcon(picture)
