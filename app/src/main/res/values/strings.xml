@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">DoAnChill</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_name">User Name</string>
+    <string name="email_id">Email ID</string>
+    <string name="password">Password (At least 6 characters)</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="don_t_worry_we_just_need_your_registered_email_address_and_t_s_done">Don\'t worry! We just need your registered email address and ít\'s done.</string>
+    <string name="go_back">Go Back</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_in1">Sign In</string>
+    <string name="sign_up_ps">Sign Up</string>
 </resources>

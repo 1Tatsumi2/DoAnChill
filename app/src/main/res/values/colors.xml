@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#181b2c</color>
+    <color name="editText">#292E4B</color>
+    <color name="startColor">#ED8770</color>
+    <color name="endColor">#D9519D</color>
+    <color name="red">#DC0B18</color>
+    <color name="green">#14EA43</color>
+    <color name="lavender"> #9873AC</color>
 </resources>
