@@ -60,4 +60,11 @@ dependencies {
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
+    //ROOM DATABASE
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    //crop image
+    implementation("com.github.yalantis:ucrop:2.2.8")
+    implementation("androidx.activity:activity:1.4.0")
 }
