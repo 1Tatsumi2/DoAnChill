@@ -2,13 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:allowBackup="true"
         android:name=".ApplicationClass"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo"
@@ -18,16 +25,20 @@
         android:theme="@style/Theme.DoAnChill"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.UploadActivity"
+            android:exported="false" />
+        <activity
             android:name=".FirstActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
-        <activity android:name=".MusicPlayerActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".MusicPlayerActivity"
+            android:exported="false" />
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="false" />
@@ -39,15 +50,31 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
-        <service android:name="com.example.doanchill.Interface.MusicService" android:enabled="true"/>
-        <receiver android:name=".Interface.NotificationReceiver" android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="NEXTS"/>
-                <action android:name="PLAY"/>
-                <action android:name="PREVIOUS"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.DoAnChill" />
+
+        <service
+            android:name=".Interface.MusicService"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".Interface.NotificationReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="NEXTS" />
+                <action android:name="PLAY" />
+                <action android:name="PREVIOUS" />
             </intent-filter>
         </receiver>
     </application>

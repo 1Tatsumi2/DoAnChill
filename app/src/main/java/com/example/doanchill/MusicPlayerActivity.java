@@ -281,7 +281,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         MusicService.MyBinder binder=(MusicService.MyBinder)service;
         musicService= binder.getService();
         musicService.setCallback(MusicPlayerActivity.this);
-        Log.e("Connected",musicService+ "");
     }
 
     @Override
