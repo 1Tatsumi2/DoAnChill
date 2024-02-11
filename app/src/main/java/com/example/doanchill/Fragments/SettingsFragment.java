@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.doanchill.Activity.UploadActivity;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 
@@ -35,8 +34,6 @@ public class SettingsFragment extends Fragment {
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openMusicPlayer = new Intent(getActivity(), UploadActivity.class);
-                startActivity(openMusicPlayer);
             }
         });
         return view;
