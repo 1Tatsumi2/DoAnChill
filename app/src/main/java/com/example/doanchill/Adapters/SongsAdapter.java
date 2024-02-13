@@ -1,15 +1,18 @@
 package com.example.doanchill.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.R;
 
@@ -29,9 +32,11 @@ public class SongsAdapter extends ArrayAdapter<Song> {
         TextView tvTitle = convertView.findViewById(R.id.tvTitle);
         TextView tvArtist = convertView.findViewById(R.id.tvArtist);
         TextView tvDuration=convertView.findViewById(R.id.tvDuration);
+        ImageView artWork=convertView.findViewById(R.id.artWork);
         Song song = getItem(position);
         tvTitle.setText(song.getTitle());
         tvArtist.setText(song.getArtist());
+        Glide.with(getContext()).load(song.getImage()).into(artWork);
         tvDuration.setText(millisecondsToString(song.getDuration()));
 
 
