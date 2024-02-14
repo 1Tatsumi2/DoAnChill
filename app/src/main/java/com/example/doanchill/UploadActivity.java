@@ -37,6 +37,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -94,7 +96,7 @@ public class UploadActivity extends AppCompatActivity {
                         if(o.getResultCode()== Activity.RESULT_OK){
                             Intent data=o.getData();
                             uriAu=data.getData();
-                            file.setText("b");
+                            file.setText("File selected");
                         }
                         else {
                             Toast.makeText(UploadActivity.this,"No File selected",Toast.LENGTH_SHORT).show();
@@ -207,8 +209,11 @@ public class UploadActivity extends AppCompatActivity {
         mediaPlayer= MediaPlayer.create(UploadActivity.this,uriAu);
         duration = mediaPlayer.getDuration();
         Song song=new Song(name,artist,audioUrl,duration,imageUrl,album,singer);
+        LocalDateTime now=LocalDateTime.now();
+        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd MM yyyy HH:mm:ss");
+        String dateTime=now.format(formatter);
         DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-        databaseReference.child(name).setValue(song).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.child(dateTime).setValue(song).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())

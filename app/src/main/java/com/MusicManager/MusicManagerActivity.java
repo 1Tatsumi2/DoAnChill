@@ -1,24 +1,12 @@
-package com.example.doanchill.Fragments;
-
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
+package com.MusicManager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -26,6 +14,8 @@ import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
+import com.example.doanchill.UploadActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,34 +26,35 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaNhanFragment extends Fragment {
+public class MusicManagerActivity extends AppCompatActivity {
 
     List<Song> songArrayList;
     ListView lvSongs;
     SearchView searchView;
-
+    FloatingActionButton fab;
     SongsAdapter songsAdapter;
     ValueEventListener valueEventListener;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ca_nhan, container, false);
-
-        lvSongs = view.findViewById(R.id.lvSongs);
-        searchView=view.findViewById(R.id.search);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_music_manager);
+        lvSongs = findViewById(R.id.lvSongs);
+        fab=findViewById(R.id.fab);
+        searchView = findViewById(R.id.search);
 
         songArrayList = new ArrayList<>();
 
-        songsAdapter = new SongsAdapter(getActivity(), songArrayList);
+        songsAdapter = new SongsAdapter(this, songArrayList);
         lvSongs.setAdapter(songsAdapter);
         showAllSongs();
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-        valueEventListener=databaseReference.addValueEventListener(new ValueEventListener() {
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
+        valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 songArrayList.clear();
-                for(DataSnapshot itemSnapshot: snapshot.getChildren())
-                {
-                    Song song= itemSnapshot.getValue(Song.class);
+                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                    Song song = itemSnapshot.getValue(Song.class);
                     song.setKey(itemSnapshot.getKey());
                     songArrayList.add(song);
                 }
@@ -72,6 +63,14 @@ public class CaNhanFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MusicManagerActivity.this, UploadActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -96,33 +95,27 @@ public class CaNhanFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Song song = songArrayList.get(position);
-                Intent openMusicPlayer = new Intent(getActivity(), MusicPlayerActivity.class);
+                Intent openMusicPlayer = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
                 openMusicPlayer.putExtra("song", song);
                 openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
-                openMusicPlayer.putExtra("position",position);
+                openMusicPlayer.putExtra("position", position);
                 startActivity(openMusicPlayer);
             }
         });
-
-        return view;
     }
-    public void searchList(String text)
-    {
-        ArrayList<Song> searchList=new ArrayList<>();
-        for(Song data:songArrayList)
-        {
+    public void searchList(String text) {
+        ArrayList<Song> searchList = new ArrayList<>();
+        for (Song data : songArrayList) {
             if(data.getTitle().toLowerCase().contains(text.toLowerCase()) ||
                     data.getSinger().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getArtist().toLowerCase().contains(text.toLowerCase()))
-            {
+                    data.getArtist().toLowerCase().contains(text.toLowerCase())) {
                 searchList.add(data);
             }
         }
         songsAdapter.searchSongLst(searchList);
     }
+
     public void showAllSongs() {
         songsAdapter.searchSongLst((ArrayList<Song>) songArrayList);
     }
-
-
 }
