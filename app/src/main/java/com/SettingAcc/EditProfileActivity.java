@@ -1,11 +1,10 @@
-package com.example.doanchill;
+package com.SettingAcc;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,23 +15,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MusicManager.UpdateActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.bumptech.glide.Glide;
+import com.example.doanchill.Fragments.SettingsFragment;
+import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,37 +42,42 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SignUpActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
-    CircleImageView image;
-    EditText Username, Email, Password, Confirmpass;
-    Button signup;
-    TextView signin;
-    ProgressBar progressBar;
-    private FirebaseAuth mAuth;
-    FirebaseFirestore fStore;
-    String UserID;
+    CircleImageView editImage;
+    Button saveBtn;
+    String name, email, imageUrl;
+    EditText editName,editEmail;
     Uri uriImage;
-    String imageUrl;
-    private ActivityResultLauncher<Intent> activityResultLauncher;
+    boolean isImageUpdated = false;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
-
-        Email = findViewById(R.id.emailid);
-        Password = findViewById(R.id.passwordps);
-        Confirmpass = findViewById(R.id.confirmpassword);
-        signup = findViewById(R.id.signup);
-        signin = findViewById(R.id.signin);
-        Username=findViewById(R.id.username);
-        image=findViewById(R.id.userImage);
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_edit_profile);
+        saveBtn=findViewById(R.id.saveProfile);
+        Intent data=getIntent();
+        Bundle bundle=getIntent().getExtras();
+        if(bundle!=null)
+        {
+            name=bundle.getString("name");
+            email=bundle.getString("email");
+            imageUrl=bundle.getString("image");
+        }
+        editEmail=findViewById(R.id.editUserEmail);
+        editName=findViewById(R.id.editUsername);
+        editImage=findViewById(R.id.editUserImage);
+        editEmail.setText(email);
+        editName.setText(name);
+        Glide.with(EditProfileActivity.this).load(imageUrl).into(editImage);
+        fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
-
+        user=fAuth.getCurrentUser();
         activityResultLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -87,15 +87,14 @@ public class SignUpActivity extends AppCompatActivity {
                         {
                             Intent data=o.getData();
                             uriImage=data.getData();
-                            image.setImageURI(uriImage);
+                            editImage.setImageURI(uriImage);
                         }
                         else {
-                            Toast.makeText(SignUpActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditProfileActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
         );
-
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -104,12 +103,10 @@ public class SignUpActivity extends AppCompatActivity {
                         UCrop.of(uriImage, uriImage)
                                 .withAspectRatio(1, 1)
                                 .start(this);
-                        image.setImageURI(uriImage);
+                        editImage.setImageURI(uriImage);
                     }
                 }
         );
-
-
         cropImageLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -123,60 +120,31 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 }
         );
-        image.setOnClickListener(new View.OnClickListener() {
+
+        editImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show image pick dialog
+                isImageUpdated=true;
                 imagePickDialog();
             }
         });
-
-        signup.setOnClickListener(new View.OnClickListener() {
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveData();
             }
         });
-
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
-            }
-        });
     }
 
     private void saveData() {
-        String user=Email.getText().toString().trim();
-        String pass=Password.getText().toString().trim();
-        String comfirm=Confirmpass.getText().toString().trim();
-        String name=Username.getText().toString().trim();
-        if(TextUtils.isEmpty(user))
-        {
-            Email.setError("Email cannot be empty");
-            return;
-        }
-        if(TextUtils.isEmpty(pass))
-        {
-            Password.setError("Password cannot be empty");
-            return;
-        }
-        if(TextUtils.isEmpty(comfirm))
-        {
-            Confirmpass.setError("Confirm password cannot be empty");
-            return;
-        }
-        if(!comfirm.equals(pass))
-        {
-            Confirmpass.setError("Password and Confirm password must equal");
-            return;
-        }
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(SignUpActivity.this);
+        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditProfileActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         android.app.AlertDialog dialog= builder.create();
         dialog.show();
-            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("User Images")
+        if (isImageUpdated)
+        {
+            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
                     .child(uriImage.getLastPathSegment());
             storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -186,31 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             imageUrl = uri.toString();
-                            mAuth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful())
-                                    {
-
-                                        Toast.makeText(SignUpActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
-                                        UserID=mAuth.getCurrentUser().getUid();
-                                        DocumentReference documentReference= fStore.collection("users").document(UserID);
-                                        Map<String,Object> users=new HashMap<>();
-                                        users.put("fName",name);
-                                        users.put("email",user);
-                                        users.put("image",imageUrl);
-                                        documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                            }
-                                        });
-                                        startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
-                                    }
-                                    else {
-                                        Toast.makeText(SignUpActivity.this,"SignUp Failed" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            UpdateData();
                             dialog.dismiss();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -222,9 +166,43 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
+        else
+        {
+            UpdateData();
+        }
+    }
+
+    private void UpdateData() {
+        email=editEmail.getText().toString();
+        name=editName.getText().toString();
+        user.verifyBeforeUpdateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(EditProfileActivity.this, "Verification mail has been sent", Toast.LENGTH_SHORT).show();
+                DocumentReference documentReference=fStore.collection("users").document(user.getUid());
+                Map<String,Object> edited=new HashMap<>();
+                edited.put("email",email);
+                edited.put("fName",name);
+                edited.put("image",imageUrl);
+                documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
+                        finish();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("LoiHetCuu",e.getMessage());
+                Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     private void imagePickDialog() {
-        //option to display in dialog
         String[] options={"Camera","Gallery"};
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("Pick Image From");
@@ -247,7 +225,6 @@ public class SignUpActivity extends AppCompatActivity {
         //create/show dialog
         builder.create().show();
     }
-
     private void pickFromGallery() {
         //intent to pick image from gallary, the image will be rerurn in onActivityResult method
         Intent i=new Intent(Intent.ACTION_GET_CONTENT);

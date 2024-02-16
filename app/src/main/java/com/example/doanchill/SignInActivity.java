@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +38,6 @@ public class SignInActivity extends AppCompatActivity {
      Username = findViewById(R.id.email);
      Password = findViewById(R.id.pass);
      signin = findViewById(R.id.entersignin);
-     progressBar = findViewById(R.id.progressBar2);
      auth=FirebaseAuth.getInstance();
 
         signin.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,6 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = Username.getText().toString();
                 String pass = Password.getText().toString();
-//                progressBar.setVisibility(View.VISIBLE);
 
                 if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches())
                 {
