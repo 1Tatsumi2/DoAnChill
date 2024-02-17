@@ -11,17 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ManageUser.ManageUserActivity;
-import com.MusicManager.MusicManagerActivity;
 import com.SettingAcc.SettingAccActivity;
 import com.bumptech.glide.Glide;
-import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.SignInActivity;
-import com.example.doanchill.UploadActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,8 +27,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-public class SettingsFragment extends Fragment {
+public class SettingUserFragment extends Fragment {
     Button Logout;
     AppCompatButton musicBtn;
     AppCompatButton logOut,settingAcc,manageUser;
@@ -42,25 +36,20 @@ public class SettingsFragment extends Fragment {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String UserID;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_settings, container, false);
-        name=view.findViewById(R.id.nameProfile);
-        email=view.findViewById(R.id.emailProfile);
-        musicBtn=view.findViewById(R.id.manageMusic);
-        logOut=view.findViewById(R.id.Logout);
-        settingAcc=view.findViewById(R.id.AdminAccount);
-        image=view.findViewById(R.id.imageView5);
-        manageUser=view.findViewById(R.id.ManageUser);
+        View view=inflater.inflate(R.layout.fragment_setting_user, container, false);
+        name=view.findViewById(R.id.nameUserProfile);
+        email=view.findViewById(R.id.emailUserProfile);
+        logOut=view.findViewById(R.id.LogoutUser);
+        settingAcc=view.findViewById(R.id.UserAccount);
+        image=view.findViewById(R.id.profileUserImage);
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
 
@@ -69,9 +58,9 @@ public class SettingsFragment extends Fragment {
         ListenerRegistration registration =documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    name.setText(value.getString("fName"));
-                    email.setText(value.getString("email"));
-                    Glide.with(getActivity()).load(value.getString("image")).into(image);
+                name.setText(value.getString("fName"));
+                email.setText(value.getString("email"));
+                Glide.with(getActivity()).load(value.getString("image")).into(image);
             }
         });
         logOut.setOnClickListener(new View.OnClickListener() {
@@ -86,19 +75,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SettingAccActivity.class));
-            }
-        });
-        manageUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ManageUserActivity.class));
-            }
-        });
-        musicBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(getActivity(), MusicManagerActivity.class);
-                startActivity(i);
             }
         });
         return view;

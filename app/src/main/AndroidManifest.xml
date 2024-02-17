@@ -24,6 +24,13 @@
         android:theme="@style/Theme.DoAnChill"
         tools:targetApi="31">
         <activity
+            android:name="com.ManageUser.UserDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.ManageUser.ManageUserActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name="com.SettingAcc.EditProfileActivity"
             android:exported="false" />
         <activity
@@ -37,18 +44,20 @@
             android:exported="false" />
         <activity
             android:name="com.MusicManager.MusicManagerActivity"
-            android:exported="false" />
+            android:exported="true"></activity>
         <activity
             android:name=".UploadActivity"
             android:exported="false" />
         <activity
             android:name=".FirstActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".MusicPlayerActivity"

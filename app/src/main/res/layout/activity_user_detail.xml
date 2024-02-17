@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/background"
+    android:gravity="center_horizontal"
+    tools:context="com.ManageUser.UserDetailActivity">
+
+
+    <TextView
+        android:id="@+id/DetailName"
+        android:text="Baby Slow Down"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/detailEmail"
+        android:text="Unknown"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/detailRole"
+        android:text="Unknown"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/detailUserImage"
+        android:layout_width="250dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/img"
+
+        android:layout_height="250dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/changeRole"
+            android:text="Change Role" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

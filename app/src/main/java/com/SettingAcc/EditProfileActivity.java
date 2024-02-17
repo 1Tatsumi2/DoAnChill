@@ -39,6 +39,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     CircleImageView editImage;
     Button saveBtn;
-    String name, email, imageUrl;
+    String name, email, imageUrl,oldEmail;
     EditText editName,editEmail;
     Uri uriImage;
     boolean isImageUpdated = false;
@@ -67,6 +68,7 @@ public class EditProfileActivity extends AppCompatActivity {
         {
             name=bundle.getString("name");
             email=bundle.getString("email");
+            oldEmail=bundle.getString("email");
             imageUrl=bundle.getString("image");
         }
         editEmail=findViewById(R.id.editUserEmail);
@@ -175,30 +177,47 @@ public class EditProfileActivity extends AppCompatActivity {
     private void UpdateData() {
         email=editEmail.getText().toString();
         name=editName.getText().toString();
-        user.verifyBeforeUpdateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(EditProfileActivity.this, "Verification mail has been sent", Toast.LENGTH_SHORT).show();
-                DocumentReference documentReference=fStore.collection("users").document(user.getUid());
-                Map<String,Object> edited=new HashMap<>();
-                edited.put("email",email);
-                edited.put("fName",name);
-                edited.put("image",imageUrl);
-                documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
-                        finish();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("LoiHetCuu",e.getMessage());
-                Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(Objects.equals(email, oldEmail))
+        {
+            DocumentReference documentReference=fStore.collection("users").document(user.getUid());
+            Map<String,Object> edited=new HashMap<>();
+            edited.put("email",email);
+            edited.put("fName",name);
+            edited.put("image",imageUrl);
+            documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
+                    finish();
+                }
+            });
+        }
+        if(!Objects.equals(email, oldEmail))
+        {
+            user.verifyBeforeUpdateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(EditProfileActivity.this, "Verification mail has been sent", Toast.LENGTH_SHORT).show();
+                    DocumentReference documentReference=fStore.collection("users").document(user.getUid());
+                    Map<String,Object> edited=new HashMap<>();
+                    edited.put("email",email);
+                    edited.put("fName",name);
+                    edited.put("image",imageUrl);
+                    documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
+                            finish();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 
