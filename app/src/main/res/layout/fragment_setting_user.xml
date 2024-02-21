@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.SettingUserFragment"
+    android:background="@drawable/backgroundtrangchu">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="35dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileUserImage"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/sangtran"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/nameUserProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Sang Tran"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+
+                    app:layout_constraintEnd_toEndOf="@+id/profileUserImage"
+                    app:layout_constraintStart_toStartOf="@+id/profileUserImage"
+                    app:layout_constraintTop_toBottomOf="@+id/profileUserImage" />
+
+                <TextView
+                    android:id="@+id/emailUserProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ComBiCha@gmail.com"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/nameUserProfile"
+                    app:layout_constraintStart_toStartOf="@+id/nameUserProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/nameUserProfile" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emailUserProfile">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/UserAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_background_1"
+                        android:drawableStart="@drawable/baseline_display_settings_24"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="Account Setting"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/LogoutUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_logout"
+                        android:textColor="@color/white"
+                        android:drawableStart="@drawable/baseline_logout_24"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="Log Out"
+                        android:textAlignment="viewStart" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

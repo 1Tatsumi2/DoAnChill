@@ -42,6 +42,7 @@ public class TrangChuFragment extends Fragment {
         slider = view.findViewById(R.id.slider);
         sliderIndicator = view.findViewById(R.id.slider_indicator);
 
+
         sliderModelList = new ArrayList<>();
         timer = new Timer();
 

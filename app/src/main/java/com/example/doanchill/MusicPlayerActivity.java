@@ -6,6 +6,7 @@ import static com.example.doanchill.ApplicationClass.ACTION_PREV;
 import static com.example.doanchill.ApplicationClass.CHANNEL_ID_2;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -20,6 +21,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Build;
@@ -44,6 +46,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Interface.ActionPlaying;
 import com.example.doanchill.Interface.MusicService;
@@ -61,7 +66,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;
     int position;
-    ImageView nextBtn, previousBtn;
+    ImageView nextBtn, previousBtn,tvImage;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
     Button btnPlay;
@@ -84,6 +89,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         Song song = (Song) getIntent().getSerializableExtra("song");
 
         tvTime = findViewById(R.id.tvTime);
+        tvImage=findViewById(R.id.tvImage);
         tvDuration = findViewById(R.id.tvDuration);
         seekBarTime = findViewById(R.id.seekBarTime);
         seekBarVolume = findViewById(R.id.seekBarVolume);
@@ -136,8 +142,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         // getting out the song name
         String name = musicList.get(position).getTitle();
         tvTitle.setText(name);
-        String artist=musicList.get(position).getArtist();
+        String singer=musicList.get(position).getSinger();
+        tvArtist.setText(singer);
         String duration = millisecondsToString(musicList.get(position).getDuration());
+        Glide.with(this).load(musicList.get(position).getImage()).into(tvImage);
         tvDuration.setText(duration);
         // accessing the songs on storage
 
@@ -281,7 +289,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         MusicService.MyBinder binder=(MusicService.MyBinder)service;
         musicService= binder.getService();
         musicService.setCallback(MusicPlayerActivity.this);
-        Log.e("Connected",musicService+ "");
     }
 
     @Override
@@ -299,23 +306,35 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         PendingIntent playPendingIntent=PendingIntent.getBroadcast(this,0,playIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         Intent nextIntent=new Intent(this,NotificationReceiver.class).setAction(ACTION_NEXTS);
         PendingIntent nextPendingIntent=PendingIntent.getBroadcast(this,0,nextIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Bitmap picture= BitmapFactory.decodeResource(getResources(),R.drawable.posterbeoi2);
-        Notification notification=new NotificationCompat.Builder(this,CHANNEL_ID_2)
-                .setSmallIcon(R.drawable.ic_music_note)
-                .setLargeIcon(picture)
-                .setContentTitle(musicList.get(position).getTitle())
-                .setContentText(musicList.get(position).getArtist())
-                .addAction(R.drawable.ic_baseline_skip_previous_24,"Previous",prevPendingIntent)
-                .addAction(playPauseBtn,"Play",playPendingIntent)
-                .addAction(R.drawable.ic_baseline_skip_next_24,"Next",nextPendingIntent)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                        .setMediaSession(mediaSession.getSessionToken()))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(contentIntent)
-                .setOnlyAlertOnce(true)
-                .build();
-        NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0,notification);
+        Glide.with(this)
+                .asBitmap()
+                .load(musicList.get(position).getImage())
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Notification notification = new NotificationCompat.Builder(MusicPlayerActivity.this, CHANNEL_ID_2)
+                                .setSmallIcon(R.drawable.ic_music_note)
+                                .setLargeIcon(resource)
+                                .setContentTitle(musicList.get(position).getTitle())
+                                .setContentText(musicList.get(position).getArtist())
+                                .addAction(R.drawable.ic_baseline_skip_previous_24,"Previous",prevPendingIntent)
+                                .addAction(playPauseBtn,"Play",playPendingIntent)
+                                .addAction(R.drawable.ic_baseline_skip_next_24,"Next",nextPendingIntent)
+                                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                                        .setMediaSession(mediaSession.getSessionToken()))
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setContentIntent(contentIntent)
+                                .setOnlyAlertOnce(true)
+                                .build();
+                        NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        notificationManager.notify(0,notification);
+
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
 //        mediaSession.setMetadata(new MediaMetadataCompat.Builder()
 //                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,musicList.get(position).getDuration())
 //                .build());
