@@ -32,6 +32,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,6 +56,8 @@ public class UploadActivity extends AppCompatActivity {
     String imageUrl, audioUrl;
     Uri uriImage,uriAu;
     MediaPlayer mediaPlayer;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference ref=db.collection("Music");
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
     private ActivityResultLauncher<Intent> activityResultLauncher;
@@ -209,23 +214,11 @@ public class UploadActivity extends AppCompatActivity {
         mediaPlayer= MediaPlayer.create(UploadActivity.this,uriAu);
         duration = mediaPlayer.getDuration();
         Song song=new Song(name,artist,audioUrl,duration,imageUrl,album,singer);
-        LocalDateTime now=LocalDateTime.now();
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd MM yyyy HH:mm:ss");
-        String dateTime=now.format(formatter);
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-        databaseReference.child(dateTime).setValue(song).addOnCompleteListener(new OnCompleteListener<Void>() {
+        ref.add(song).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(UploadActivity.this,"Saved",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UploadActivity.this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(UploadActivity.this,"Saved",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
