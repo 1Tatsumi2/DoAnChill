@@ -42,6 +42,7 @@ android {
 
 dependencies {
 
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.appcompat:appcompat:1.6.1")
