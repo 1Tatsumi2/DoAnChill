@@ -12,38 +12,46 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/slider"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/slider_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/slider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tabBackground="@drawable/slider_indicator"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp">
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" >
+            </androidx.viewpager.widget.ViewPager>
 
-        </com.google.android.material.tabs.TabLayout>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/slider_indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/slider"
+                    app:tabBackground="@drawable/slider_indicator"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp">
+
+                </com.google.android.material.tabs.TabLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/khamPha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Khám phá"
+            android:textColor="#FFFFFF"
             android:textSize="35sp"
             android:textStyle="bold">
+
         </TextView>
 
 
@@ -84,13 +92,13 @@
 
         <TextView
             android:id="@+id/playList"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="PlayList"
+            android:textColor="#FFFFFF"
             android:textSize="35sp"
-            android:textStyle="bold">
-        </TextView>
+            android:textStyle="bold"></TextView>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -129,13 +137,13 @@
 
         <TextView
             android:id="@+id/artistStory"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Artist's Story #1 - Mono Be The Sky"
+            android:textColor="#FFFFFF"
             android:textSize="25sp"
-            android:textStyle="bold">
-        </TextView>
+            android:textStyle="bold"></TextView>
 
         <ImageView
             android:layout_width="match_parent"
