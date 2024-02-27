@@ -3,13 +3,22 @@ package com.example.doanchill.Class;
 import java.io.Serializable;
 
 public class Users implements Serializable {
-    private String name;
+    private String fName;
     private String email;
     private String image;
     private String role;
+    private String key;
 
-    public Users(String name, String email, String image, String role) {
-        this.name = name;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Users(String fName, String email, String image, String role) {
+        this.fName = fName;
         this.email = email;
         this.image = image;
         this.role = role;
@@ -18,12 +27,12 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public String getName() {
-        return name;
+    public String getfName() {
+        return fName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setfName(String fName) {
+        this.fName = fName;
     }
 
     public String getEmail() {

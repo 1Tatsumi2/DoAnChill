@@ -69,8 +69,8 @@ public class MusicManagerActivity extends AppCompatActivity {
                     Song song=documentSnapshot.toObject(Song.class);
                     song.setKey(documentSnapshot.getId());
                     songArrayList.add(song);
+                    songsAdapter.notifyDataSetChanged();
                 }
-                songsAdapter.notifyDataSetChanged();
             }
         });
 
