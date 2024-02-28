@@ -34,6 +34,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,6 +58,8 @@ public class UpdateActivity extends AppCompatActivity {
     boolean isImageUpdated = false;
     boolean isAudioUpdated = false;
     int duration=0;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    DocumentReference ref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,22 +283,15 @@ public class UpdateActivity extends AppCompatActivity {
             duration = mediaPlayer.getDuration();
         }
         Song song=new Song(nameUpdate,artistUpdate,audioUrl,duration,imageUrl,albumUpdate,singerUpdate);
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music").child(key);
-        databaseReference.setValue(song).addOnCompleteListener(new OnCompleteListener<Void>() {
+        ref=db.collection("Music").document(key);
+        ref.set(song).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(UpdateActivity.this,"Update Success",Toast.LENGTH_SHORT).show();
+            public void onSuccess(Void unused) {
+                Toast.makeText(UpdateActivity.this,"Update Success",Toast.LENGTH_SHORT).show();
                     finish();
                     Intent i=new Intent(UpdateActivity.this, MusicManagerActivity.class);
                     startActivity(i);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UpdateActivity.this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                    finish();
             }
         });
     }

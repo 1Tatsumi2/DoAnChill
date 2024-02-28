@@ -74,29 +74,69 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="32dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        style="@android:style/Widget.Button"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/btn_background_1"
-                        android:drawableStart="@drawable/baseline_display_settings_24"
+                        android:drawableStart="@drawable/ic_1"
                         android:drawablePadding="20dp"
                         android:paddingStart="20dp"
-                        android:text="Account Setting"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black" />
+                        android:text="Account Settings"
+                        android:textAlignment="viewStart" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/MyPlaylist"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_background_1"
+                        android:drawableStart="@drawable/ic_2"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="My Playlists"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        style="@android:style/Widget.Button"
+                        android:textAlignment="viewStart" />
 
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/NotificationUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        style="@android:style/Widget.Button"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_background_1"
+                        android:drawableStart="@drawable/ic_4"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="Notification"
+                        android:textAlignment="viewStart" />
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/LogoutUser"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/btn_logout"
                         android:textColor="@color/white"
+                        android:textSize="18sp"
                         android:drawableStart="@drawable/baseline_logout_24"
                         android:drawablePadding="20dp"
                         android:paddingStart="20dp"
                         android:text="Log Out"
                         android:textAlignment="viewStart" />
+
 
                 </LinearLayout>
 
@@ -105,3 +145,4 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

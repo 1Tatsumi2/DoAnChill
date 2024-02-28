@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -37,6 +39,7 @@ import java.util.List;
 public class MusicDetailActivity extends AppCompatActivity {
 
     Bundle songExtraData;
+    String key;
     TextView tvTime, tvTitle, tvArtist,tvSinger;
     TextView tvDuration;
     Button editBtn,deleteBtn;
@@ -46,6 +49,8 @@ public class MusicDetailActivity extends AppCompatActivity {
     SeekBar seekBarVolume;
     static MediaPlayer mMediaPlayer;
     ArrayList<Song> musicList;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    DocumentReference ref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,8 @@ public class MusicDetailActivity extends AppCompatActivity {
         songExtraData = intent.getExtras();
         musicList = (ArrayList)songExtraData.getParcelableArrayList("musics");
         position = songExtraData.getInt("position", 0);
+        key=songExtraData.getString("key");
+
 
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
@@ -173,6 +180,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                         .putExtra("Key",musicList.get(position).getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -201,7 +209,6 @@ public class MusicDetailActivity extends AppCompatActivity {
     }
 
     private void deleteSong() {
-        final  DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
         FirebaseStorage storage=FirebaseStorage.getInstance();
         StorageReference audioReference = storage.getReferenceFromUrl(musicList.get(position).getPath());
         StorageReference imageReference = storage.getReferenceFromUrl(musicList.get(position).getImage());
@@ -216,8 +223,9 @@ public class MusicDetailActivity extends AppCompatActivity {
             return deleteImage;
         }).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                String key = musicList.get(position).getKey();
-                databaseReference.child(key).removeValue();
+                ref=db.collection("Music").document(key);
+                //xóa file audio và image cũ(not done)
+                ref.delete();
                 Toast.makeText(MusicDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MusicDetailActivity.this, SettingsFragment.class));
                 finish();

@@ -20,6 +20,7 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.Class.Users;
 import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ValueEventListener;
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,23 +57,16 @@ public class ManageUserActivity extends AppCompatActivity {
         showAllUser();
         fStore=FirebaseFirestore.getInstance();
         CollectionReference collection=fStore.collection("users");
-        collection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String name=document.getString("fName");
-                        String email=document.getString("email");
-                        String role=document.getString("role");
-                        String imageURl=document.getString("image");
-                        Users users=new Users(name,email,imageURl,role);
-                        userID=document.getId();
-                        usersList.add(users);
-                    }
-                    userAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(ManageUserActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                {
+                    Users users =documentSnapshot.toObject(Users.class);
+                    users.setKey(documentSnapshot.getId());
+                    usersList.add(users);
                 }
+                userAdapter.notifyDataSetChanged();
             }
         });
 
@@ -98,16 +93,16 @@ public class ManageUserActivity extends AppCompatActivity {
                 Users users = usersList.get(position);
                 Intent i = new Intent(ManageUserActivity.this, UserDetailActivity.class);
                 i.putExtra("user", users);
-                i.putExtra("ID", userID);
+                i.putExtra("key",users.getKey());
                 startActivity(i);
+                finish();
             }
         });
     }
     public void searchList(String text) {
         ArrayList<Users> searchList = new ArrayList<>();
         for (Users data : usersList) {
-            if(data.getName().toLowerCase().contains(text.toLowerCase())){
-                Log.d("trollVN", data.getName() );
+            if(data.getfName().toLowerCase().contains(text.toLowerCase())){
                 searchList.add(data);
             }
         }

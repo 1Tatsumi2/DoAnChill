@@ -1,10 +1,11 @@
-package com.example.doanchill;
+package com.example.doanchill.Playlist;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,64 +17,64 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.MusicManager.PlaylistDetailActivity;
+import com.bumptech.glide.Glide;
+import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.doanchill.R;
+import com.example.doanchill.UploadActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UploadActivity extends AppCompatActivity {
+public class AddPlaylistActivity extends AppCompatActivity {
 
-    EditText uploadName, uploadArtist, uploadAlbum, uploadSinger;
-    TextView file;
-
-    Button saveBtn,uploadFile;
+    EditText name, desc;
+    Switch publicSwitch;
     CircleImageView uploadImage;
-    String imageUrl, audioUrl;
-    Uri uriImage,uriAu;
-    MediaPlayer mediaPlayer;
+    String imageUrl;
+    Uri uriImage;
+    Button addPlaylist;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
-    CollectionReference ref=db.collection("Music");
+    CollectionReference ref=db.collection("Playlist");
+    String UserID;
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
-        uploadAlbum=findViewById(R.id.uploadAlbum);
-        uploadArtist=findViewById(R.id.uploadArtist);
-        uploadName=findViewById(R.id.uploadName);
-        uploadSinger=findViewById(R.id.uploadSinger);
-        file=findViewById(R.id.file);
-        saveBtn=findViewById(R.id.saveButton);
-        uploadFile=findViewById(R.id.btnUploadFile);
-        uploadImage=findViewById(R.id.uploadImage);
-        //image
+        setContentView(R.layout.activity_add_playlist);
+        name=findViewById(R.id.CreatePlaylistName);
+        desc=findViewById(R.id.CreatePlaylistDesc);
+        publicSwitch=findViewById(R.id.isPublic);
+        addPlaylist=findViewById(R.id.createPlaylist);
+        uploadImage=findViewById(R.id.uploadImagePlaylist);
+        fAuth=FirebaseAuth.getInstance();
+        UserID=fAuth.getCurrentUser().getUid();
+        fStore=FirebaseFirestore.getInstance();
         activityResultLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -86,31 +87,11 @@ public class UploadActivity extends AppCompatActivity {
                             uploadImage.setImageURI(uriImage);
                         }
                         else {
-                            Toast.makeText(UploadActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPlaylistActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
         );
-
-        //audio
-        ActivityResultLauncher<Intent> activityResultLauncherAu=registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult o) {
-                        if(o.getResultCode()== Activity.RESULT_OK){
-                            Intent data=o.getData();
-                            uriAu=data.getData();
-                            file.setText("File selected");
-                        }
-                        else {
-                            Toast.makeText(UploadActivity.this,"No File selected",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-        );
-
-        //camera
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -139,16 +120,6 @@ public class UploadActivity extends AppCompatActivity {
                 }
         );
 
-        //audio on click
-        uploadFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photopicker=new Intent(Intent.ACTION_GET_CONTENT);
-                photopicker.setType("audio/*");
-                activityResultLauncherAu.launch(photopicker);
-            }
-        });
-        //Click image view to show image pick dialog
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,73 +127,13 @@ public class UploadActivity extends AppCompatActivity {
                 imagePickDialog();
             }
         });
-        saveBtn.setOnClickListener(new View.OnClickListener() {
+        addPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+               saveData();
             }
         });
     }
-
-    private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(UploadActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
-                .child(uriImage.getLastPathSegment());
-        StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
-                .child(uriAu.getLastPathSegment());
-
-        UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
-        UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
-
-        uploadTaskImg.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw task.getException();
-            }
-            return storageReferenceImg.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                imageUrl = task.getResult().toString();
-
-                uploadTaskAu.continueWithTask(taskAu -> {
-                    if (!taskAu.isSuccessful()) {
-                        throw taskAu.getException();
-                    }
-                    return storageReferenceAu.getDownloadUrl();
-                }).addOnCompleteListener(taskAu -> {
-                    if (taskAu.isSuccessful()) {
-                        audioUrl = taskAu.getResult().toString();
-
-                        // Call UploadData() only when both download URLs have been retrieved
-                        dialog.dismiss();
-                        UploadData();
-                    }
-                });
-            }
-        });
-    }
-
-    private void UploadData() {
-        String name=uploadName.getText().toString();
-        String artist=uploadArtist.getText().toString();
-        String album=uploadAlbum.getText().toString();
-        String singer=uploadSinger.getText().toString();
-        int duration=0;
-        mediaPlayer= MediaPlayer.create(UploadActivity.this,uriAu);
-        duration = mediaPlayer.getDuration();
-        Song song=new Song(name,artist,audioUrl,duration,imageUrl,album,singer);
-        ref.add(song).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(UploadActivity.this,"Saved",Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
     private void imagePickDialog() {
         //option to display in dialog
         String[] options={"Camera","Gallery"};
@@ -267,6 +178,50 @@ public class UploadActivity extends AppCompatActivity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT,uriImage);
         cameraLauncher.launch(intent);
     }
+    private void saveData() {
+        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(AddPlaylistActivity.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        android.app.AlertDialog dialog= builder.create();
+        dialog.show();
+        StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Playlist Images")
+                .child(uriImage.getLastPathSegment());
+                storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uria) {
+                        imageUrl = uria.toString();
+                        dialog.dismiss();
+                        UploadData();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
 
-
+    private void UploadData() {
+        String names=name.getText().toString();
+        String descs=desc.getText().toString();
+        DocumentReference documentReference=fStore.collection("users").document(UserID);
+        Playlist playlist=new Playlist(names,descs,publicSwitch.isChecked(),documentReference,imageUrl);
+        ref.add(playlist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(AddPlaylistActivity.this,"Playlist Created",Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(AddPlaylistActivity.this, PlaylistDetailActivity.class);
+                playlist.setKey(documentReference.getId());
+                i.putExtra("key",playlist.getKey());
+                startActivity(i);
+                finish();
+            }
+        });
+    }
 }

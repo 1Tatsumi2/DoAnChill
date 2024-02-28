@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +30,14 @@ public class SettingAccActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     Button verifySend,editBtn;
+    ImageView back;
     TextView verfiyNofi;
     String userID,name,email,imageUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_acc);
+        back = findViewById(R.id.btnBack);
         verfiyNofi=findViewById(R.id.verifyNofi);
         verifySend=findViewById(R.id.verify);
         editBtn=findViewById(R.id.editProfile);
@@ -83,6 +86,13 @@ public class SettingAccActivity extends AppCompatActivity {
                 i.putExtra("email",email);
                 i.putExtra("image",imageUrl);
                 startActivity(i);
+                finish();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

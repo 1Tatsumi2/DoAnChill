@@ -26,11 +26,16 @@ import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +49,8 @@ public class CaNhanFragment extends Fragment {
 
     SongsAdapter songsAdapter;
     ValueEventListener valueEventListener;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference ref=db.collection("Music");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ca_nhan, container, false);
@@ -56,24 +63,35 @@ public class CaNhanFragment extends Fragment {
         songsAdapter = new SongsAdapter(getActivity(), songArrayList);
         lvSongs.setAdapter(songsAdapter);
         showAllSongs();
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-        valueEventListener=databaseReference.addValueEventListener(new ValueEventListener() {
+        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                songArrayList.clear();
-                for(DataSnapshot itemSnapshot: snapshot.getChildren())
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
-                    Song song= itemSnapshot.getValue(Song.class);
-                    song.setKey(itemSnapshot.getKey());
+                    Song song=documentSnapshot.toObject(Song.class);
                     songArrayList.add(song);
                 }
                 songsAdapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
         });
+//        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
+//        valueEventListener=databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                songArrayList.clear();
+//                for(DataSnapshot itemSnapshot: snapshot.getChildren())
+//                {
+//                    Song song= itemSnapshot.getValue(Song.class);
+//                    song.setKey(itemSnapshot.getKey());
+//                    songArrayList.add(song);
+//                }
+//                songsAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
