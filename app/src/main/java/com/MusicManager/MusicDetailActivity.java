@@ -180,6 +180,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                         .putExtra("Key",musicList.get(position).getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
                 startActivity(intent);
+                finish();
             }
         });
     }

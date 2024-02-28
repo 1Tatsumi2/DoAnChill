@@ -52,10 +52,14 @@
             android:id="@+id/detailPlaylistDesc"
             android:text="demo"
             />
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/detailPlaylistSongName"
+            android:text="Add music"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:id="@+id/addMusicToPlaylist"
             />
 
         <ListView

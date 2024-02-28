@@ -86,6 +86,7 @@ public class SettingAccActivity extends AppCompatActivity {
                 i.putExtra("email",email);
                 i.putExtra("image",imageUrl);
                 startActivity(i);
+                finish();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {

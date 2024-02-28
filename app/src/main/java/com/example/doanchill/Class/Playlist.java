@@ -10,12 +10,12 @@ public class Playlist implements Serializable {
     private  String image;
     private String description;
     private Boolean isPublic;
-    private String author;
+    private DocumentReference author;
     private int songNumber;
     private Map<String, Object> songs;
     private  String key;
 
-    public Playlist(String name, String image, String description, Boolean isPublic, String author, int songNumber, Map<String, Object> songs) {
+    public Playlist(String name, String image, String description, Boolean isPublic, DocumentReference author, int songNumber, Map<String, Object> songs) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -28,6 +28,14 @@ public class Playlist implements Serializable {
     public Playlist() {
     }
 
+    public Playlist(String name, String description, Boolean isPublic, DocumentReference author,String image) {
+        this.name = name;
+        this.description = description;
+        this.isPublic = isPublic;
+        this.author = author;
+        this.image=image;
+    }
+
     public String getKey() {
         return key;
     }
@@ -36,11 +44,11 @@ public class Playlist implements Serializable {
         this.key = key;
     }
 
-    public String getAuthor() {
+    public DocumentReference getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(DocumentReference author) {
         this.author = author;
     }
 

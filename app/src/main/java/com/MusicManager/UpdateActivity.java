@@ -291,6 +291,7 @@ public class UpdateActivity extends AppCompatActivity {
                     finish();
                     Intent i=new Intent(UpdateActivity.this, MusicManagerActivity.class);
                     startActivity(i);
+                    finish();
             }
         });
     }

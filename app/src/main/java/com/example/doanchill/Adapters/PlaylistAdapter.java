@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,12 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
         ImageView image=convertView.findViewById(R.id.imagePlaylist);
         Playlist playlist=getItem(position);
         playlistTitle.setText(playlist.getName());
-        playlistAuthor.setText(playlist.getAuthor());
+        playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                playlistAuthor.setText(documentSnapshot.getString("fName"));
+            }
+        });
         Glide.with(getContext()).load(playlist.getImage()).into(image);
         return  convertView;
 
