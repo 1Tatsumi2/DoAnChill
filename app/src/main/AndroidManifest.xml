@@ -25,14 +25,27 @@
         android:theme="@style/Theme.DoAnChill"
         tools:targetApi="31">
         <activity
+            android:name=".Playlist.AddMusicToPlayListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Playlist.AddPlaylistActivity"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
             android:name=".Playlist.PlaylistManagerActivity"
-            android:exported="true" >
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <meta-data
@@ -41,8 +54,7 @@
 
         <activity
             android:name="com.MusicManager.PlaylistDetailActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name="com.ManageUser.UserDetailActivity"
             android:exported="false" />
@@ -71,12 +83,12 @@
             android:name=".FirstActivity"
             android:exported="true">
 
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
 
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".MusicPlayerActivity"
@@ -92,15 +104,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+            android:exported="true" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

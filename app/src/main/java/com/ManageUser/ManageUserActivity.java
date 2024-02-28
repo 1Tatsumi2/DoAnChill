@@ -95,6 +95,7 @@ public class ManageUserActivity extends AppCompatActivity {
                 i.putExtra("user", users);
                 i.putExtra("key",users.getKey());
                 startActivity(i);
+                finish();
             }
         });
     }
