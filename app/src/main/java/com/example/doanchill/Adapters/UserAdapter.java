@@ -36,7 +36,7 @@ public class UserAdapter extends ArrayAdapter<Users> {
         TextView role=convertView.findViewById(R.id.tvRole);
         ImageView image=convertView.findViewById(R.id.tvImageUser);
         Users user=getItem(position);
-        name.setText(user.getName());
+        name.setText(user.getfName());
         email.setText(user.getEmail());
         role.setText(user.getRole());
         Glide.with(getContext()).load(user.getImage()).into(image);

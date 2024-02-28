@@ -20,6 +20,7 @@ import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.UploadActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -43,6 +45,8 @@ public class MusicManagerActivity extends AppCompatActivity {
     FloatingActionButton fab;
     SongsAdapter songsAdapter;
     ValueEventListener valueEventListener;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference ref=db.collection("Music");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,21 +61,16 @@ public class MusicManagerActivity extends AppCompatActivity {
         lvSongs.setAdapter(songsAdapter);
         showAllSongs();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-        valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                songArrayList.clear();
-                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    Song song = itemSnapshot.getValue(Song.class);
-                    song.setKey(itemSnapshot.getKey());
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                {
+                    Song song=documentSnapshot.toObject(Song.class);
+                    song.setKey(documentSnapshot.getId());
                     songArrayList.add(song);
+                    songsAdapter.notifyDataSetChanged();
                 }
-                songsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
 
@@ -106,6 +105,7 @@ public class MusicManagerActivity extends AppCompatActivity {
                 Song song = songArrayList.get(position);
                 Intent openMusicPlayer = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
                 openMusicPlayer.putExtra("song", song);
+                openMusicPlayer.putExtra("key",song.getKey());
                 openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
                 openMusicPlayer.putExtra("position", position);
                 startActivity(openMusicPlayer);
