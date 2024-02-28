@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         fStore=FirebaseFirestore.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
         DocumentReference documentReference=fStore.collection("users").document(UserID);
-        adView = findViewById(R.id.adView);
         ListenerRegistration registration =documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -83,11 +82,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-            adView = findViewById(R.id.adView);
-            MobileAds.initialize(this);
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+
+                }
+            });
 
             AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
 
             InterstitialAd.load(this, getString(R.string.inter_ad_unit_id), adRequest, new InterstitialAdLoadCallback() {
                 @Override

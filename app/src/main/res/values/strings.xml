@@ -17,6 +17,6 @@
     <string name="log_in">Log In</string>
     <string name="sign_in1">Sign In</string>
     <string name="sign_up_ps">Sign Up</string>
-<!--    <string name="inter_ad_unit_id">ca-app-pub-5179902064241544/8225067197</string>-->
-    <string name="inter_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="inter_ad_unit_id">ca-app-pub-5179902064241544/8225067197</string>
+<!--    <string name="inter_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>-->
 </resources>
