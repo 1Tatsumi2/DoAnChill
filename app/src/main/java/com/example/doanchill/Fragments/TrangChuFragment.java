@@ -22,7 +22,7 @@ import java.util.Timer;
 
 
 public class TrangChuFragment extends Fragment {
-
+;;
     private ViewPager slider;
     private ArrayList<SliderModel> sliderModelList;
     private SliderAdapter sliderAdapter;
@@ -46,9 +46,9 @@ public class TrangChuFragment extends Fragment {
         sliderModelList = new ArrayList<>();
         timer = new Timer();
 
-        sliderModelList.add(new SliderModel(R.drawable.spacespeaker,"Playlist #1"));
-        sliderModelList.add(new SliderModel(R.drawable.poster2,"Playlist #2"));
-        sliderModelList.add(new SliderModel(R.drawable.poster3,"Playlist #3"));
+        sliderModelList.add(new SliderModel(R.drawable.karik,"Playlist #1"));
+        sliderModelList.add(new SliderModel(R.drawable.tlinh,"Playlist #2"));
+        sliderModelList.add(new SliderModel(R.drawable.binz,"Playlist #3"));
         sliderModelList.add(new SliderModel(R.drawable.poster4,"Playlist #4"));
 
         sliderAdapter = new SliderAdapter(getContext(),sliderModelList);
