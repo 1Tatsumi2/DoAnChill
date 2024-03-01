@@ -61,7 +61,6 @@ import java.util.ArrayList;
 
 public class MusicPlayerActivity extends AppCompatActivity implements ActionPlaying,ServiceConnection {
     // views declaration
-    private static final int REQUEST_PERMISSION = 99;
     Bundle songExtraData;
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;

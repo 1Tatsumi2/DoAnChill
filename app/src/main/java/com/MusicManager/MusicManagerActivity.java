@@ -44,7 +44,6 @@ public class MusicManagerActivity extends AppCompatActivity {
     SearchView searchView;
     FloatingActionButton fab;
     SongsAdapter songsAdapter;
-    ValueEventListener valueEventListener;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Music");
     @Override
@@ -69,8 +68,8 @@ public class MusicManagerActivity extends AppCompatActivity {
                     Song song=documentSnapshot.toObject(Song.class);
                     song.setKey(documentSnapshot.getId());
                     songArrayList.add(song);
-                    songsAdapter.notifyDataSetChanged();
                 }
+                songsAdapter.notifyDataSetChanged();
             }
         });
 
@@ -103,27 +102,23 @@ public class MusicManagerActivity extends AppCompatActivity {
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Song song = songArrayList.get(position);
+                Song song = songsAdapter.getItem(position);
                 Intent openMusicPlayer = new Intent(MusicManagerActivity.this, MusicDetailActivity.class);
                 openMusicPlayer.putExtra("song", song);
                 openMusicPlayer.putExtra("key",song.getKey());
-                openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
-                openMusicPlayer.putExtra("position", position);
                 startActivity(openMusicPlayer);
                 finish();
             }
         });
     }
     public void searchList(String text) {
-        ArrayList<Song> searchList = new ArrayList<>();
+        ArrayList<Song> searchLists = new ArrayList<>();
         for (Song data : songArrayList) {
-            if(data.getTitle().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getSinger().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getArtist().toLowerCase().contains(text.toLowerCase())) {
-                searchList.add(data);
+            if(data.getTitle().toLowerCase().contains(text.toLowerCase())) {
+                searchLists.add(data);
             }
         }
-        songsAdapter.searchSongLst(searchList);
+        songsAdapter.searchSongLst(searchLists);
     }
 
     public void showAllSongs() {

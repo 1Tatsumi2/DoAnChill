@@ -2,6 +2,7 @@ package com.example.doanchill.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,12 @@ public class SongsAdapter extends ArrayAdapter<Song> {
         this.songList = new ArrayList<>(objects);
     }
 
+    @Nullable
+    @Override
+    public Song getItem(int position) {
+        return songList.get(position);
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -35,7 +42,7 @@ public class SongsAdapter extends ArrayAdapter<Song> {
 
         TextView tvTitle = convertView.findViewById(R.id.tvTitle);
         TextView tvArtist = convertView.findViewById(R.id.tvArtist);
-        TextView tvDuration=convertView.findViewById(R.id.tvDuration);
+        TextView tvDuration=convertView.findViewById(R.id.tvDuration); 
         ImageView artWork=convertView.findViewById(R.id.artWork);
         Song song = getItem(position);
         tvTitle.setText(song.getTitle());
@@ -60,7 +67,7 @@ public class SongsAdapter extends ArrayAdapter<Song> {
 
     public void searchSongLst(ArrayList<Song> searchList)
     {
-        songList = searchList;
+        songList=searchList;
         notifyDataSetChanged();
     }
 }

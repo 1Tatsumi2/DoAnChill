@@ -48,14 +48,14 @@ public class MusicDetailActivity extends AppCompatActivity {
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
     static MediaPlayer mMediaPlayer;
-    ArrayList<Song> musicList;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     DocumentReference ref;
+    Song song;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_detail);
-        Song song = (Song) getIntent().getSerializableExtra("song");
+        song = (Song) getIntent().getSerializableExtra("song");
         editBtn=findViewById(R.id.editMusic);
         deleteBtn=findViewById(R.id.deleteMusic);
         tvTime = findViewById(R.id.manageTime);
@@ -74,8 +74,6 @@ public class MusicDetailActivity extends AppCompatActivity {
         //getting values from previous activity
         Intent intent = getIntent();
         songExtraData = intent.getExtras();
-        musicList = (ArrayList)songExtraData.getParcelableArrayList("musics");
-        position = songExtraData.getInt("position", 0);
         key=songExtraData.getString("key");
 
 
@@ -83,16 +81,16 @@ public class MusicDetailActivity extends AppCompatActivity {
             mMediaPlayer.reset();
         }
         // getting out the song name
-        String name = musicList.get(position).getTitle();
+        String name = song.getTitle();
         tvTitle.setText(name);
-        String singer=musicList.get(position).getSinger();
-        String duration = millisecondsToString(musicList.get(position).getDuration());
-        Glide.with(this).load(musicList.get(position).getImage()).into(tvImage);
+        String singer=song.getSinger();
+        String duration = millisecondsToString(song.getDuration());
+        Glide.with(this).load(song.getImage()).into(tvImage);
         tvDuration.setText(duration);
-        String artist=musicList.get(position).getArtist();
+        String artist=song.getArtist();
         tvSinger.setText(singer);
         tvArtist.setText(artist);
-        Uri uri = Uri.parse(musicList.get(position).getPath());
+        Uri uri = Uri.parse(song.getPath());
         mMediaPlayer = MediaPlayer.create(this, uri);
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -171,13 +169,13 @@ public class MusicDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mMediaPlayer.stop();
                 Intent intent=new Intent(MusicDetailActivity.this, UpdateActivity.class)
-                        .putExtra("Title",musicList.get(position).getTitle())
-                        .putExtra("Artist",musicList.get(position).getArtist())
-                        .putExtra("Singer",musicList.get(position).getSinger())
-                        .putExtra("Album",musicList.get(position).getAlbum())
-                        .putExtra("Image",musicList.get(position).getImage())
-                        .putExtra("Audio",musicList.get(position).getPath())
-                        .putExtra("Key",musicList.get(position).getKey())
+                        .putExtra("Title",song.getTitle())
+                        .putExtra("Artist",song.getArtist())
+                        .putExtra("Singer",song.getSinger())
+                        .putExtra("Album",song.getAlbum())
+                        .putExtra("Image",song.getImage())
+                        .putExtra("Audio",song.getPath())
+                        .putExtra("Key",song.getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
                 startActivity(intent);
                 finish();
@@ -210,8 +208,8 @@ public class MusicDetailActivity extends AppCompatActivity {
 
     private void deleteSong() {
         FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference audioReference = storage.getReferenceFromUrl(musicList.get(position).getPath());
-        StorageReference imageReference = storage.getReferenceFromUrl(musicList.get(position).getImage());
+        StorageReference audioReference = storage.getReferenceFromUrl(song.getPath());
+        StorageReference imageReference = storage.getReferenceFromUrl(song.getImage());
 
         Task<Void> deleteAudio = audioReference.delete();
         Task<Void> deleteImage = imageReference.delete();
@@ -227,7 +225,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                 //xóa file audio và image cũ(not done)
                 ref.delete();
                 Toast.makeText(MusicDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MusicDetailActivity.this, SettingsFragment.class));
+                startActivity(new Intent(MusicDetailActivity.this, MusicManagerActivity.class));
                 finish();
             }
         });

@@ -29,6 +29,12 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
         this.playlists=new ArrayList<>(objects);
     }
 
+    @Nullable
+    @Override
+    public Playlist getItem(int position) {
+        return playlists.get(position);
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
