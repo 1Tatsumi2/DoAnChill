@@ -27,6 +27,12 @@ public class UserAdapter extends ArrayAdapter<Users> {
         this.userList = new ArrayList<>(objects);
     }
 
+    @Nullable
+    @Override
+    public Users getItem(int position) {
+        return userList.get(position);
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

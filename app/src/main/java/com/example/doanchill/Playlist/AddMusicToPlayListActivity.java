@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SearchView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -37,9 +38,7 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
     List<Song> songArrayList;
     ListView lvSongs;
     SearchView searchView;
-    FloatingActionButton fab;
     SongsAdapter songsAdapter;
-    ValueEventListener valueEventListener;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     String key;
     CollectionReference ref=db.collection("Music");
@@ -90,7 +89,7 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Song song = songArrayList.get(position);
+                Song song = songsAdapter.getItem(position);
                 DocumentReference ref=db.collection("Playlist").document(key);
                 DocumentReference musicRef=db.collection("Music").document(song.getKey());
                 Map<String,Object> map=new HashMap<>();
@@ -130,9 +129,7 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
     public void searchList(String text) {
         ArrayList<Song> searchList = new ArrayList<>();
         for (Song data : songArrayList) {
-            if(data.getTitle().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getSinger().toLowerCase().contains(text.toLowerCase()) ||
-                    data.getArtist().toLowerCase().contains(text.toLowerCase())) {
+            if(data.getTitle().toLowerCase().contains(text.toLowerCase())) {
                 searchList.add(data);
             }
         }

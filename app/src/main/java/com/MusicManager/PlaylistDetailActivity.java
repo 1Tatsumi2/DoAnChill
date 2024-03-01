@@ -1,9 +1,11 @@
 package com.MusicManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,12 +19,16 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
 import com.example.doanchill.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,10 +80,16 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Song song=documentSnapshot.toObject(Song.class);
-                                song.setKey(documentSnapshot.getId());
-                                songArrayList.add(song);
-                                songsAdapter.notifyDataSetChanged();
+                               if(documentSnapshot.exists())
+                               {
+                                   Song song=documentSnapshot.toObject(Song.class);
+                                   song.setKey(documentSnapshot.getId());
+                                   songArrayList.add(song);
+                                   songsAdapter.notifyDataSetChanged();
+                               }
+                               else {
+                                   ref.update("songs."+entry.getKey(), FieldValue.delete());
+                               }
                             }
                         });
                     }

@@ -82,10 +82,16 @@ public class PlaylistManagerActivity extends AppCompatActivity {
         lvPlaylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Playlist playlist=playlistArrayList.get(position);
+                Playlist playlist=playlistAdapter.getItem(position);
                 Intent i=new Intent(PlaylistManagerActivity.this, PlaylistDetailActivity.class);
                 i.putExtra("key",playlist.getKey());
                 startActivity(i);
+            }
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PlaylistManagerActivity.this,AddPlaylistActivity.class));
             }
         });
     }

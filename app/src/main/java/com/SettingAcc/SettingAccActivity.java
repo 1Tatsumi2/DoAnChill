@@ -3,6 +3,7 @@ package com.SettingAcc;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.doanchill.R;
+import com.example.doanchill.SignInActivity;
 import com.example.doanchill.SignUpActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class SettingAccActivity extends AppCompatActivity {
 
@@ -31,8 +34,9 @@ public class SettingAccActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     Button verifySend,editBtn;
     ImageView back;
+    AppCompatButton logOut;
     TextView verfiyNofi;
-    String userID,name,email,imageUrl;
+    String userID,name,email,imageUrl,role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +50,13 @@ public class SettingAccActivity extends AppCompatActivity {
         userID=fAuth.getCurrentUser().getUid();
         FirebaseUser user=fAuth.getCurrentUser();
         DocumentReference documentReference=fStore.collection("users").document(userID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        ListenerRegistration registration =  documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 name=(value.getString("fName"));
                 email=(value.getString("email"));
                 imageUrl=value.getString("image");
+                role=value.getString("role");
             }
         });
         if(user.isEmailVerified())
@@ -82,9 +87,11 @@ public class SettingAccActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(SettingAccActivity.this, EditProfileActivity.class);
+                registration.remove();
                 i.putExtra("name",name);
                 i.putExtra("email",email);
                 i.putExtra("image",imageUrl);
+                i.putExtra("role",role);
                 startActivity(i);
                 finish();
             }
@@ -92,8 +99,11 @@ public class SettingAccActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 finish();
             }
         });
+
+
     }
 }

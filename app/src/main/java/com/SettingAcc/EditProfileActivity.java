@@ -25,12 +25,14 @@ import com.MusicManager.UpdateActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Fragments.SettingsFragment;
 import com.example.doanchill.R;
+import com.example.doanchill.SignInActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -51,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText editName,editEmail;
     Uri uriImage;
     boolean isImageUpdated = false;
+    String role;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
     private ActivityResultLauncher<Intent> activityResultLauncher;
@@ -70,6 +73,7 @@ public class EditProfileActivity extends AppCompatActivity {
             email=bundle.getString("email");
             oldEmail=bundle.getString("email");
             imageUrl=bundle.getString("image");
+            role=bundle.getString("role");
         }
         editEmail=findViewById(R.id.editUserEmail);
         editName=findViewById(R.id.editUsername);
@@ -184,7 +188,8 @@ public class EditProfileActivity extends AppCompatActivity {
             edited.put("email",email);
             edited.put("fName",name);
             edited.put("image",imageUrl);
-            documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+            edited.put("role",role);
+            documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
@@ -203,10 +208,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     edited.put("email",email);
                     edited.put("fName",name);
                     edited.put("image",imageUrl);
-                    documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    edited.put("role",role);
+                    documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
+                            startActivity(new Intent(EditProfileActivity.this, SignInActivity.class));
+//                            fAuth.signOut();
                             finish();
                         }
                     });

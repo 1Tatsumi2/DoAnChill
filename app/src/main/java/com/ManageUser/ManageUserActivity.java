@@ -90,7 +90,7 @@ public class ManageUserActivity extends AppCompatActivity {
         lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Users users = usersList.get(position);
+                Users users = userAdapter.getItem(position);
                 Intent i = new Intent(ManageUserActivity.this, UserDetailActivity.class);
                 i.putExtra("user", users);
                 i.putExtra("key",users.getKey());

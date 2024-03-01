@@ -288,7 +288,6 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(UpdateActivity.this,"Update Success",Toast.LENGTH_SHORT).show();
-                    finish();
                     Intent i=new Intent(UpdateActivity.this, MusicManagerActivity.class);
                     startActivity(i);
                     finish();

@@ -74,24 +74,6 @@ public class CaNhanFragment extends Fragment {
                 songsAdapter.notifyDataSetChanged();
             }
         });
-//        DatabaseReference databaseReference= FirebaseDatabase.getInstance("https://chill-8ac86-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("music");
-//        valueEventListener=databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                songArrayList.clear();
-//                for(DataSnapshot itemSnapshot: snapshot.getChildren())
-//                {
-//                    Song song= itemSnapshot.getValue(Song.class);
-//                    song.setKey(itemSnapshot.getKey());
-//                    songArrayList.add(song);
-//                }
-//                songsAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -113,11 +95,12 @@ public class CaNhanFragment extends Fragment {
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Song song = songArrayList.get(position);
+                Song song = songsAdapter.getItem(position);
+                int originalPosition = songArrayList.indexOf(song);
                 Intent openMusicPlayer = new Intent(getActivity(), MusicPlayerActivity.class);
                 openMusicPlayer.putExtra("song", song);
                 openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
-                openMusicPlayer.putExtra("position",position);
+                openMusicPlayer.putExtra("position",originalPosition);
                 startActivity(openMusicPlayer);
             }
         });

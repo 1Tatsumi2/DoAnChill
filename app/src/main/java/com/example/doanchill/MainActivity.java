@@ -70,12 +70,16 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new TrangChuFragment());
         binding.bottomView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
+                registration.remove();
                 replaceFragment(new TrangChuFragment());
             } else if (item.getItemId() == R.id.profile) {
+                registration.remove();
                 replaceFragment(new CaNhanFragment());
             } else if ((item.getItemId() == R.id.settings) && ((Objects.equals(role, "Admin")) ||Objects.equals(role,"Moderator"))) {
+                registration.remove();
                 replaceFragment(new SettingsFragment());
             } else if ((item.getItemId() == R.id.settings) && Objects.equals(role, "User")) {
+                registration.remove();
                 replaceFragment(new SettingUserFragment());
             }
             return true;

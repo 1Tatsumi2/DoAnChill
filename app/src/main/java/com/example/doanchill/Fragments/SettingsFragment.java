@@ -36,7 +36,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class SettingsFragment extends Fragment {
-    Button Logout;
     AppCompatButton musicBtn;
     AppCompatButton logOut,settingAcc,manageUser,managePlaylist;
     CircleImageView image;
