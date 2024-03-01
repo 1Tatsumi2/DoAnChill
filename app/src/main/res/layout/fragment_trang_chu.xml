@@ -12,44 +12,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/slider"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" >
-            </androidx.viewpager.widget.ViewPager>
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/slider_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/slider"
-                    app:tabBackground="@drawable/slider_indicator"
-                    app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp">
-
-                </com.google.android.material.tabs.TabLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
             android:id="@+id/khamPha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Khám phá"
+            android:text=" Khám phá"
             android:textColor="#FFFFFF"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textStyle="bold">
 
         </TextView>
@@ -67,38 +38,101 @@
             >
 
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="20sp"
-                android:layout_marginEnd="20sp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="15sp"
+                android:layout_marginEnd="15sp"
                 android:scaleType="fitXY"
-                android:src="@drawable/sontung"/>
+                android:src="@drawable/sontung"
+
+            />
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="20sp"
-                android:layout_marginEnd="20sp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="15sp"
+                android:layout_marginEnd="15sp"
                 android:scaleType="fitXY"
-                android:src="@drawable/mono"/>
+                android:src="@drawable/mono2"/>
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="20sp"
-                android:layout_marginEnd="20sp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="15sp"
+                android:layout_marginEnd="15sp"
                 android:scaleType="fitXY"
                 android:src="@drawable/erik"/>
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="15sp"
+                android:layout_marginEnd="15sp"
+                android:scaleType="fitXY"
+                android:src="@drawable/amee"/>
+
         </LinearLayout>
     </HorizontalScrollView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/DangChuY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="20dp"
+                android:text=" Đáng chú ý"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/slider"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="-3dp">
+
+            </TextView>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/slider"
+                android:layout_width="411dp"
+                android:layout_height="119dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="SpeakableTextPresentCheck">
+
+            </androidx.viewpager.widget.ViewPager>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/slider_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/slider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabBackground="@drawable/slider_indicator"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp">
+
+            </com.google.android.material.tabs.TabLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <TextView
             android:id="@+id/playList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="PlayList"
+            android:text=" PlayList  >"
             android:textColor="#FFFFFF"
-            android:textSize="35sp"
-            android:textStyle="bold"></TextView>
+            android:textSize="22sp"
+            android:textStyle="bold">
+
+        </TextView>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -112,28 +146,102 @@
                 >
 
                 <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginEnd="20sp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/mck" />
+                    android:src="@drawable/greyd" />
                 <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginEnd="20sp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
                     android:scaleType="fitXY"
                     android:src="@drawable/phuongmichi"/>
                 <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginEnd="20sp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
                     android:scaleType="fitXY"
                     android:src="@drawable/hieuthuhai"/>
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/wn"/>
+
             </LinearLayout>
         </HorizontalScrollView>
+
+
+
+
+            <TextView
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text=" Top 100  >"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/nhactre">
+
+                    </ImageView>
+
+
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/pop"/>
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/edm"/>
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginEnd="15sp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/rapviet"/>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
         <TextView
             android:id="@+id/artistStory"
@@ -143,12 +251,14 @@
             android:text="Artist's Story #1 - Mono Be The Sky"
             android:textColor="#FFFFFF"
             android:textSize="25sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold">
+
+        </TextView>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="15sp"
             android:scaleType="fitXY"
             android:src="@drawable/monoartist"/>
 

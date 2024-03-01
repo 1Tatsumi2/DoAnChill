@@ -203,7 +203,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     edited.put("email",email);
                     edited.put("fName",name);
                     edited.put("image",imageUrl);
-                    documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));

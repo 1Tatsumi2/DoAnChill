@@ -8,30 +8,16 @@
 
     <ImageView
         android:id="@+id/slider_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="411dp"
+        android:layout_height="250dp"
         android:foreground="@drawable/gradient_foreground"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47"
         app:srcCompat="@drawable/spacespeaker" />
 
-    <TextView
-        android:id="@+id/slider_tittle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="24dp"
-        android:text="Playlist Name"
-        android:textColor="#FFF5F5"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.101"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.861" />
 </androidx.constraintlayout.widget.ConstraintLayout>
