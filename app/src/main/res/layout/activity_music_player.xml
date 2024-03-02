@@ -150,4 +150,17 @@
     </LinearLayout>
 
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adbanner"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111">
+
+
+    </com.google.android.gms.ads.AdView>
+
+
 </LinearLayout>
