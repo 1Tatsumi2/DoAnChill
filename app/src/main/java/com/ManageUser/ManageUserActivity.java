@@ -86,7 +86,13 @@ public class ManageUserActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ManageUserActivity.this,AddUserActivity.class));
+                finish();
+            }
+        });
         lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

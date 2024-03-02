@@ -149,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void saveData() {
         String user=Email.getText().toString().trim();
         String pass=Password.getText().toString().trim();
-        String comfirm=Confirmpass.getText().toString().trim();
+        String comfirm =Confirmpass.getText().toString().trim();
         String name=Username.getText().toString().trim();
         if(TextUtils.isEmpty(user))
         {

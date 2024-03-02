@@ -58,6 +58,11 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.Interface.ActionPlaying;
 import com.example.doanchill.Interface.MusicService;
 import com.example.doanchill.Interface.NotificationReceiver;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -84,11 +89,24 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     NotificationManager notificationManager;
     MusicService musicService;
     MediaSessionCompat mediaSession;
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        mAdView = findViewById(R.id.adbanner);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -440,7 +458,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             showNotification(R.drawable.ic_pause,0F);
         }
     }
-
 }
 
 
