@@ -33,6 +33,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.SeekBar;
@@ -65,10 +66,11 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;
     int position;
-    ImageView nextBtn, previousBtn,tvImage;
+    ImageView nextBtn, previousBtn,tvImage,back;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
     Button btnPlay;
+    ImageButton dotbutton;
     static MediaPlayer mMediaPlayer;
     ArrayList<Song> musicList;
     NotificationManager notificationManager;
@@ -97,6 +99,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         previousBtn = findViewById(R.id.previous);
         tvTitle = findViewById(R.id.tvTitle);
         tvArtist = findViewById(R.id.tvArtist);
+        back = findViewById(R.id.btnBack1);
+        dotbutton = findViewById(R.id.dotbutton);
         mediaSession=new MediaSessionCompat(this,"PlayerAudio");
         if(mMediaPlayer!=null)
         {
@@ -126,6 +130,19 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             @Override
             public void onClick(View v) {
                 prevClicked();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.stop();
+                finish();
+            }
+        });
+        dotbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //chuc nang cua dotbutton
             }
         });
     }//end main
@@ -390,6 +407,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             showNotification(R.drawable.ic_pause,0F);
         }
     }
+
 }
 
 
