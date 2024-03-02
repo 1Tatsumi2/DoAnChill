@@ -33,6 +33,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -142,7 +143,21 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         dotbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //chuc nang cua dotbutton
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), dotbutton);
+                popupMenu.getMenuInflater().inflate(R.menu.dot_menu_button, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Handle menu item click here
+                        switch (item.getItemId()) {
+                            // Handle each menu item's click event
+                        }
+                        return true;
+                    }
+                });
+
+                popupMenu.show();
             }
         });
     }//end main
