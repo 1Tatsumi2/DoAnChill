@@ -7,12 +7,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MusicManager.MusicManagerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.SignInActivity;
 import com.example.doanchill.SignUpActivity;
@@ -43,6 +44,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import com.example.doanchill.UploadActivity;
 
 public class AddUserActivity extends AppCompatActivity {
 
@@ -245,5 +247,10 @@ public class AddUserActivity extends AppCompatActivity {
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,uriImage);
         cameraLauncher.launch(intent);
+    }
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(AddUserActivity.this, ManageUserActivity.class));
+        finish();
     }
 }

@@ -18,6 +18,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ManageUser.ManageUserActivity;
+import com.ManageUser.UserDetailActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Fragments.SettingsFragment;
@@ -181,6 +183,13 @@ public class MusicDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mMediaPlayer.stop();
+        startActivity(new Intent(MusicDetailActivity.this, MusicManagerActivity.class));
+        finish();
     }
 
     private void confirmDelete() {

@@ -18,6 +18,7 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlaylistManagerActivity extends AppCompatActivity {
 
@@ -37,8 +39,11 @@ public class PlaylistManagerActivity extends AppCompatActivity {
     SearchView searchView;
     FloatingActionButton fab;
     PlaylistAdapter playlistAdapter;
+    FirebaseAuth fAuth;
+    String UserID,role;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
+    CollectionReference refUser=db.collection("users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,20 +54,63 @@ public class PlaylistManagerActivity extends AppCompatActivity {
         playlistArrayList=new ArrayList<>();
         playlistAdapter=new PlaylistAdapter(this,2,playlistArrayList);
         lvPlaylist.setAdapter(playlistAdapter);
-        showPlaylist();
-        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        fAuth=FirebaseAuth.getInstance();
+        UserID=fAuth.getCurrentUser().getUid();
+        DocumentReference UserRef=refUser.document(UserID);
+        UserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                role=documentSnapshot.getString("role");
+                showPlaylist();
+                if(Objects.equals(role, "User"))
                 {
-                    Playlist playlist=documentSnapshot.toObject(Playlist.class);
-                    playlist.setKey(documentSnapshot.getId());
-                    playlistArrayList.add(playlist);
+                    ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                            {
+                                Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                                playlist.setKey(documentSnapshot.getId());
+                                playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if(documentSnapshot.getId().equals(UserID))
+                                        {
+                                            playlistArrayList.add(playlist);
+                                            playlistAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
 
+                            }
+                        }
+                    });
                 }
-                playlistAdapter.notifyDataSetChanged();
+                else {
+                    ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                            {
+                                Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                                playlist.setKey(documentSnapshot.getId());
+                                playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
+                                        {
+                                            playlistArrayList.add(playlist);
+                                            playlistAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
+
+                            }                }
+                    });
+                }
             }
         });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

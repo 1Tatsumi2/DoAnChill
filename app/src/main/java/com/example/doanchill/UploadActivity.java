@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MusicManager.MusicManagerActivity;
 import com.example.doanchill.Class.Song;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -221,6 +222,12 @@ public class UploadActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(UploadActivity.this, MusicManagerActivity.class));
+        finish();
     }
 
     private void imagePickDialog() {

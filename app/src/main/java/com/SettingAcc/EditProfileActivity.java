@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ManageUser.ManageUserActivity;
+import com.ManageUser.UserDetailActivity;
 import com.MusicManager.UpdateActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Fragments.SettingsFragment;
@@ -226,6 +228,12 @@ public class EditProfileActivity extends AppCompatActivity {
             });
         }
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
+        finish();
     }
 
     private void imagePickDialog() {

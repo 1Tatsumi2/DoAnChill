@@ -104,6 +104,13 @@ public class ManageUserActivity extends AppCompatActivity {
                 finish();
             }
         });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ManageUserActivity.this, AddUserActivity.class));
+                finish();
+            }
+        });
     }
     public void searchList(String text) {
         ArrayList<Users> searchList = new ArrayList<>();

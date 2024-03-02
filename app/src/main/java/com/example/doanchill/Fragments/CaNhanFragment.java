@@ -69,6 +69,7 @@ public class CaNhanFragment extends Fragment {
                 for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Song song=documentSnapshot.toObject(Song.class);
+                    song.setKey(documentSnapshot.getId());
                     songArrayList.add(song);
                 }
                 songsAdapter.notifyDataSetChanged();
@@ -100,6 +101,7 @@ public class CaNhanFragment extends Fragment {
                 Intent openMusicPlayer = new Intent(getActivity(), MusicPlayerActivity.class);
                 openMusicPlayer.putExtra("song", song);
                 openMusicPlayer.putExtra("musics", (Serializable) songArrayList);
+                openMusicPlayer.putExtra("key",song.getKey());
                 openMusicPlayer.putExtra("position",originalPosition);
                 startActivity(openMusicPlayer);
             }
