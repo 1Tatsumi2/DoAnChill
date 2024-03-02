@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PlaylistAdapter extends ArrayAdapter<Playlist> {
     private List<Playlist> playlists;
@@ -47,7 +48,13 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
         playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                playlistAuthor.setText(documentSnapshot.getString("fName"));
+                if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
+                {
+                    playlistAuthor.setText("DoAnChill");
+                }
+                else {
+                    playlistAuthor.setText(documentSnapshot.getString("fName"));
+                }
             }
         });
         Glide.with(getContext()).load(playlist.getImage()).into(image);

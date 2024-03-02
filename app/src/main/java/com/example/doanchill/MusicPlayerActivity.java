@@ -32,6 +32,8 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.widget.ImageButton;
@@ -48,6 +50,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.MusicManager.AddPlaylistToMusicActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -55,6 +58,9 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.Interface.ActionPlaying;
 import com.example.doanchill.Interface.MusicService;
 import com.example.doanchill.Interface.NotificationReceiver;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +77,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
     Button btnPlay;
+    String key;
     ImageButton dotbutton;
     static MediaPlayer mMediaPlayer;
     ArrayList<Song> musicList;
@@ -89,7 +96,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         }
 
         Song song = (Song) getIntent().getSerializableExtra("song");
-
         tvTime = findViewById(R.id.tvTime);
         tvImage=findViewById(R.id.tvImage);
         tvDuration = findViewById(R.id.tvDuration);
@@ -111,6 +117,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         //getting values from previous activity
         Intent intent = getIntent();
         songExtraData = intent.getExtras();
+        key=songExtraData.getString("key");
         musicList = (ArrayList)songExtraData.getParcelableArrayList("musics");
         position = songExtraData.getInt("position", 0);
 
@@ -150,8 +157,12 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         // Handle menu item click here
-                        switch (item.getItemId()) {
-                            // Handle each menu item's click event
+                        if(item.getItemId()==R.id.add_to_playlist)
+                        {
+                            Intent i=new Intent(MusicPlayerActivity.this, AddPlaylistToMusicActivity.class);
+                            i.putExtra("key",key);
+                            startActivity(i);
+                            finish();
                         }
                         return true;
                     }
@@ -161,6 +172,13 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             }
         });
     }//end main
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
 
     private void initializeMusicPlayer(int position) {
@@ -424,5 +442,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     }
 
 }
+
 
 

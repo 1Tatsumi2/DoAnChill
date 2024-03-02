@@ -1,4 +1,4 @@
-package com.example.doanchill.Playlist;
+package com.MusicManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -11,14 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.MusicManager.MusicDetailActivity;
-import com.MusicManager.MusicManagerActivity;
+import com.example.doanchill.Adapters.PlaylistAdapter;
 import com.example.doanchill.Adapters.SongsAdapter;
+import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
+import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
+import com.example.doanchill.Playlist.PlaylistManagerActivity;
 import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,45 +28,55 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddMusicToPlayListActivity extends AppCompatActivity {
+public class AddPlaylistToMusicActivity extends AppCompatActivity {
 
-    List<Song> songArrayList;
+    List<Playlist> playlistList;
     ListView lvSongs;
     SearchView searchView;
-    SongsAdapter songsAdapter;
+    PlaylistAdapter playlistAdapter;
+    FirebaseAuth fAuth;
+    String UserID;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     String key;
-    CollectionReference ref=db.collection("Music");
+    CollectionReference ref=db.collection("Playlist");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_music_to_play_list);
-        lvSongs = findViewById(R.id.lvSongsInPlayList);
-        searchView = findViewById(R.id.searchMusicInPlaylist);
+        setContentView(R.layout.activity_add_playlist_to_music);
+        lvSongs = findViewById(R.id.lvPlaylistsToMusic);
+        searchView = findViewById(R.id.searchPlaylistToMusic);
         Intent intent=getIntent();
         Bundle extraData=intent.getExtras();
-        key=extraData.getString("keyPlaylist");
-        songArrayList = new ArrayList<>();
-
-        songsAdapter = new SongsAdapter(this, songArrayList);
-        lvSongs.setAdapter(songsAdapter);
-        showAllSongs();
-
+        key=extraData.getString("key");
+        playlistList = new ArrayList<>();
+        fAuth=FirebaseAuth.getInstance();
+        UserID=fAuth.getCurrentUser().getUid();
+        playlistAdapter = new PlaylistAdapter(this, 3, playlistList);
+        lvSongs.setAdapter(playlistAdapter);
+        showAllPlaylist();
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
-                    Song song=documentSnapshot.toObject(Song.class);
-                    song.setKey(documentSnapshot.getId());
-                    songArrayList.add(song);
-                    songsAdapter.notifyDataSetChanged();
+                    Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                    playlist.setKey(documentSnapshot.getId());
+                    playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                          String name=documentSnapshot.getId();
+                          if(name.equals(UserID))
+                          {
+                              playlistList.add(playlist);
+                              playlistAdapter.notifyDataSetChanged();
+                          }
+                        }
+                    });
                 }
             }
         });
@@ -78,39 +89,37 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
-                    showAllSongs();
+                    showAllPlaylist();
                 } else {
                     searchList(newText);
                 }
                 return true;
             }
         });
-
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Song song = songsAdapter.getItem(position);
-                DocumentReference ref=db.collection("Playlist").document(key);
-                DocumentReference musicRef=db.collection("Music").document(song.getKey());
-                Map<String,Object> map=new HashMap<>();
-                ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Playlist playlist=playlistAdapter.getItem(position);
+                String keys=playlist.getKey();
+                DocumentReference songRef=db.collection("Music").document(key);
+                DocumentReference playListRef=ref.document(keys);
+                playListRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Map<String, Object> songs = (Map<String, Object>) documentSnapshot.get("songs");
-                        String uniqueKey=song.getKey();
-                        if (songs != null && songs.containsKey(uniqueKey)) {
+                        if (songs != null && songs.containsKey(key)) {
                             // Nếu trường tồn tại, xóa nó
                             Map<String, Object> updates = new HashMap<>();
                             Double k=documentSnapshot.getDouble("songNumber");
                             Integer ik=k.intValue();
                             Integer updatedNumber=ik-1;
                             updates.put("songNumber",updatedNumber);
-                            updates.put("songs." + uniqueKey, FieldValue.delete());
+                            updates.put("songs." + key, FieldValue.delete());
 
-                            ref.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            playListRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(AddMusicToPlayListActivity.this,"song removed",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddPlaylistToMusicActivity.this,"song removed",Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -120,12 +129,12 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
                             Integer ik=k.intValue();
                             Integer updatedNumber=ik+1;
                             updates.put("songNumber",updatedNumber);
-                            updates.put("songs." + uniqueKey, musicRef);
+                            updates.put("songs." + key, songRef);
 
-                            ref.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            playListRef.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(AddMusicToPlayListActivity.this, "Added to playlist", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddPlaylistToMusicActivity.this, "Added to playlist", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -134,17 +143,19 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
             }
         });
     }
-    public void searchList(String text) {
-        ArrayList<Song> searchList = new ArrayList<>();
-        for (Song data : songArrayList) {
-            if(data.getTitle().toLowerCase().contains(text.toLowerCase())) {
+
+    private void searchList(String newText) {
+        ArrayList<Playlist> searchList = new ArrayList<>();
+        for (Playlist data : playlistList) {
+            if(data.getName().toLowerCase().contains(newText.toLowerCase())) {
                 searchList.add(data);
             }
         }
-        songsAdapter.searchSongLst(searchList);
+        playlistAdapter.searchPlaylist(searchList);
     }
-    public void showAllSongs() {
-        songsAdapter.searchSongLst((ArrayList<Song>) songArrayList);
+
+    private void showAllPlaylist() {
+        playlistAdapter.searchPlaylist((ArrayList<Playlist>) playlistList);
     }
 
     @Override
