@@ -101,6 +101,10 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
                         if (songs != null && songs.containsKey(uniqueKey)) {
                             // Nếu trường tồn tại, xóa nó
                             Map<String, Object> updates = new HashMap<>();
+                            Double k=documentSnapshot.getDouble("songNumber");
+                            Integer ik=k.intValue();
+                            Integer updatedNumber=ik-1;
+                            updates.put("songNumber",updatedNumber);
                             updates.put("songs." + uniqueKey, FieldValue.delete());
 
                             ref.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -112,6 +116,10 @@ public class AddMusicToPlayListActivity extends AppCompatActivity {
                         } else {
                             // Nếu trường không tồn tại, thêm nó
                             Map<String, Object> updates = new HashMap<>();
+                            Double k=documentSnapshot.getDouble("songNumber");
+                            Integer ik=k.intValue();
+                            Integer updatedNumber=ik+1;
+                            updates.put("songNumber",updatedNumber);
                             updates.put("songs." + uniqueKey, musicRef);
 
                             ref.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
