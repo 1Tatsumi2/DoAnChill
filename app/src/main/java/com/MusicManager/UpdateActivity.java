@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ManageUser.ManageUserActivity;
+import com.ManageUser.UserDetailActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Fragments.SettingsFragment;
@@ -174,6 +176,12 @@ public class UpdateActivity extends AppCompatActivity {
                 saveData();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(UpdateActivity.this, MusicManagerActivity.class));
+        finish();
     }
 
     private void saveData() {

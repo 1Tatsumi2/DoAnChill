@@ -31,44 +31,11 @@
         android:layout_height="wrap_content">
 
 
-        <LinearLayout
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="15sp"
-                android:layout_marginEnd="15sp"
-                android:scaleType="fitXY"
-                android:src="@drawable/sontung"
-
-            />
-            <ImageView
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="15sp"
-                android:layout_marginEnd="15sp"
-                android:scaleType="fitXY"
-                android:src="@drawable/mono2"/>
-            <ImageView
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="15sp"
-                android:layout_marginEnd="15sp"
-                android:scaleType="fitXY"
-                android:src="@drawable/erik"/>
-            <ImageView
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="15sp"
-                android:layout_marginEnd="15sp"
-                android:scaleType="fitXY"
-                android:src="@drawable/amee"/>
-
-        </LinearLayout>
+        </ListView>
     </HorizontalScrollView>
 
 

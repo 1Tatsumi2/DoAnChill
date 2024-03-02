@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ManageUser.ManageUserActivity;
+import com.ManageUser.UserDetailActivity;
 import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Class.Users;
@@ -110,6 +111,11 @@ public class MusicManagerActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
     public void searchList(String text) {
         ArrayList<Song> searchLists = new ArrayList<>();

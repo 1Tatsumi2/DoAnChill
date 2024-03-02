@@ -223,6 +223,12 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+        finish();
+    }
 
     private void imagePickDialog() {
         //option to display in dialog

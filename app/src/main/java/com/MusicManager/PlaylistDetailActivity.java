@@ -13,11 +13,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ManageUser.ManageUserActivity;
+import com.ManageUser.UserDetailActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
+import com.example.doanchill.Playlist.PlaylistManagerActivity;
 import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -118,6 +121,12 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(PlaylistDetailActivity.this, PlaylistManagerActivity.class));
+        finish();
     }
     public void showAllSongs() {
         songsAdapter.searchSongLst((ArrayList<Song>) songArrayList);

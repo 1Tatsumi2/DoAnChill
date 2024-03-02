@@ -92,4 +92,10 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(UserDetailActivity.this, ManageUserActivity.class));
+        finish();
+    }
 }
