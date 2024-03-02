@@ -35,6 +35,7 @@ public class SettingAccActivity extends AppCompatActivity {
     Button verifySend,editBtn;
     ImageView back;
     AppCompatButton logOut;
+    ListenerRegistration registration;
     TextView verfiyNofi;
     String userID,name,email,imageUrl,role;
     @Override
@@ -50,7 +51,7 @@ public class SettingAccActivity extends AppCompatActivity {
         userID=fAuth.getCurrentUser().getUid();
         FirebaseUser user=fAuth.getCurrentUser();
         DocumentReference documentReference=fStore.collection("users").document(userID);
-        ListenerRegistration registration =  documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        registration =  documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 name=(value.getString("fName"));
@@ -87,11 +88,11 @@ public class SettingAccActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(SettingAccActivity.this, EditProfileActivity.class);
-                registration.remove();
                 i.putExtra("name",name);
                 i.putExtra("email",email);
                 i.putExtra("image",imageUrl);
                 i.putExtra("role",role);
+                registration.remove();
                 startActivity(i);
                 finish();
             }
@@ -104,6 +105,12 @@ public class SettingAccActivity extends AppCompatActivity {
             }
         });
 
-
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        registration.remove();
+        finish();
+    }
+
 }
