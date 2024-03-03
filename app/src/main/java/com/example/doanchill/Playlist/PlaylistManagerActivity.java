@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.MusicManager.PlaylistDetailActivity;
 import com.example.doanchill.Adapters.PlaylistAdapter;
@@ -40,7 +42,8 @@ public class PlaylistManagerActivity extends AppCompatActivity {
     FloatingActionButton fab;
     PlaylistAdapter playlistAdapter;
     FirebaseAuth fAuth;
-    String UserID,role;
+    String UserID,role,classified;;
+    Spinner spinner;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
     CollectionReference refUser=db.collection("users");
@@ -50,10 +53,12 @@ public class PlaylistManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_playlist_manager);
         lvPlaylist=findViewById(R.id.lvPlaylists);
         fab=findViewById(R.id.fabAddPlaylist);
+        spinner=findViewById(R.id.spinnerPlaylist);
         searchView=findViewById(R.id.searchPlaylist);
         playlistArrayList=new ArrayList<>();
         playlistAdapter=new PlaylistAdapter(this,2,playlistArrayList);
         lvPlaylist.setAdapter(playlistAdapter);
+        showPlaylist();
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
         DocumentReference UserRef=refUser.document(UserID);
@@ -64,6 +69,8 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                 showPlaylist();
                 if(Objects.equals(role, "User"))
                 {
+                    classified="My Playlist";
+                    spinner.setVisibility(View.GONE); // Ẩn spinner nếu vai trò của người dùng là "user"
                     ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -94,10 +101,11 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                             {
                                 Playlist playlist=documentSnapshot.toObject(Playlist.class);
                                 playlist.setKey(documentSnapshot.getId());
+                                String classified=documentSnapshot.getString("classified");
                                 playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
+                                        if((!Objects.equals(documentSnapshot.getString("role"), "User"))&&(!Objects.equals(classified, "My Playlist")))
                                         {
                                             playlistArrayList.add(playlist);
                                             playlistAdapter.notifyDataSetChanged();
@@ -107,6 +115,33 @@ public class PlaylistManagerActivity extends AppCompatActivity {
 
                             }                }
                     });
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String item=parent.getItemAtPosition(position).toString();
+                            classified=item;
+                            if (classified!="Sort by")
+                            {
+                                sortBy(classified);
+                            }
+                            else
+                            {
+                                showPlaylist();
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                    ArrayList<String> arrayList=new ArrayList<>();
+                    arrayList.add("Sort by");
+                    arrayList.add("Playlist");
+                    arrayList.add("Top 100");
+                    arrayList.add("Top Singer");
+                    ArrayAdapter<String> adapter=new ArrayAdapter<>(PlaylistManagerActivity.this, android.R.layout.simple_spinner_item,arrayList);
+                    adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                    spinner.setAdapter(adapter);
                 }
             }
         });
@@ -145,6 +180,17 @@ public class PlaylistManagerActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void sortBy(String sort) {
+        ArrayList<Playlist> searchList = new ArrayList<>();
+        for (Playlist data : playlistArrayList) {
+            if(Objects.equals(data.getClassified(), sort)) {
+                searchList.add(data);
+            }
+        }
+        playlistAdapter.searchPlaylist(searchList);
+    }
+
     public void searchList(String text) {
         ArrayList<Playlist> searchList = new ArrayList<>();
         for (Playlist data : playlistArrayList) {
