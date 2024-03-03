@@ -120,7 +120,9 @@ public class MusicManagerActivity extends AppCompatActivity {
     public void searchList(String text) {
         ArrayList<Song> searchLists = new ArrayList<>();
         for (Song data : songArrayList) {
-            if(data.getTitle().toLowerCase().contains(text.toLowerCase())) {
+            if(data.getTitle().toLowerCase().contains(text.toLowerCase()) ||
+                    data.getSinger().toLowerCase().contains(text.toLowerCase()) ||
+                    data.getArtist().toLowerCase().contains(text.toLowerCase())) {
                 searchLists.add(data);
             }
         }

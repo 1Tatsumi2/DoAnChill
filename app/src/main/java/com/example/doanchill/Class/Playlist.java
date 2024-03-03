@@ -13,27 +13,38 @@ public class Playlist implements Serializable {
     private DocumentReference author;
     private int songNumber;
     private Map<String, Object> songs;
+    private  String classified;
     private  String key;
 
-    public Playlist(String name, String image, String description, Boolean isPublic, DocumentReference author, int songNumber, Map<String, Object> songs) {
+    public Playlist(String name, String image, String description, Boolean isPublic, DocumentReference author, int songNumber, String classified,Map<String,Object> songs) {
         this.name = name;
         this.image = image;
         this.description = description;
         this.isPublic = isPublic;
         this.author = author;
         this.songNumber = songNumber;
+        this.classified=classified;
         this.songs = songs;
     }
 
     public Playlist() {
     }
 
-    public Playlist(String name, String description, Boolean isPublic, DocumentReference author,String image) {
+    public Playlist(String name, String description, Boolean isPublic, DocumentReference author,String image,String classified) {
         this.name = name;
         this.description = description;
         this.isPublic = isPublic;
         this.author = author;
         this.image=image;
+        this.classified=classified;
+    }
+
+    public String getClassified() {
+        return classified;
+    }
+
+    public void setClassified(String classified) {
+        this.classified = classified;
     }
 
     public String getKey() {

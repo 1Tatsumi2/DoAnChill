@@ -18,8 +18,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -45,11 +48,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddPlaylistActivity extends AppCompatActivity {
 
     EditText name, desc;
+    Spinner spinner;
     Switch publicSwitch;
     CircleImageView uploadImage;
     String imageUrl;
@@ -57,7 +63,8 @@ public class AddPlaylistActivity extends AppCompatActivity {
     Button addPlaylist;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
-    String UserID;
+    CollectionReference refUser=db.collection("users");
+    String UserID, classified;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     private ActivityResultLauncher<Intent> cameraLauncher;
@@ -72,9 +79,46 @@ public class AddPlaylistActivity extends AppCompatActivity {
         publicSwitch=findViewById(R.id.isPublic);
         addPlaylist=findViewById(R.id.createPlaylist);
         uploadImage=findViewById(R.id.uploadImagePlaylist);
+        spinner=findViewById(R.id.spinner);
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
         fStore=FirebaseFirestore.getInstance();
+        refUser.document(UserID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+             String role=documentSnapshot.getString("role");
+             if(!role.equals("User"))
+             {
+                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                     @Override
+                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                         String item=parent.getItemAtPosition(position).toString();
+                         classified=item;
+                     }
+
+                     @Override
+                     public void onNothingSelected(AdapterView<?> parent) {
+                         String defaultItem = "My Playlist";
+                         classified=defaultItem;
+                     }
+                 });
+                 ArrayList<String> arrayList=new ArrayList<>();
+                 arrayList.add("Playlist");
+                 arrayList.add("Top 100");
+                 arrayList.add("Top Singer");
+                 arrayList.add("My Playlist");
+                 ArrayAdapter<String> adapter=new ArrayAdapter<>(AddPlaylistActivity.this, android.R.layout.simple_spinner_item,arrayList);
+                 adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                 spinner.setAdapter(adapter);
+             }
+             else {
+                 classified="My Playlist";
+                 spinner.setVisibility(View.GONE); // Ẩn spinner nếu vai trò của người dùng là "user"
+             }
+            }
+        });
+
+
         activityResultLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -211,7 +255,7 @@ public class AddPlaylistActivity extends AppCompatActivity {
         String names=name.getText().toString();
         String descs=desc.getText().toString();
         DocumentReference documentReference=fStore.collection("users").document(UserID);
-        Playlist playlist=new Playlist(names,descs,publicSwitch.isChecked(),documentReference,imageUrl);
+        Playlist playlist=new Playlist(names,descs,publicSwitch.isChecked(),documentReference,imageUrl,classified);
         ref.add(playlist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
