@@ -26,17 +26,50 @@
         </TextView>
 
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <ListView
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </ListView>
-    </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/sontung"
+
+                    />
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/mono2"/>
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/erik"/>
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/amee"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,252 +127,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" PlayList  >"
+            android:text=" PlayList"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
 
         </TextView>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                >
-                <LinearLayout 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">   
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="0sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/greyd" />
-
-                    <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Grey D"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
-                    
-                </LinearLayout>
-                    
-                
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/phuongmichi"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phương Mỹ Chi"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/hieuthuhai"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hieuthu2"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-
-                    </TextView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/wn"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="W/n"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-
-                </LinearLayout>
-
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-
-
+                android:id="@+id/LstViewPlay"
+                />
 
         <TextView
             android:id="@+id/top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" Top 100  >"
+            android:text=" Top 100"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
 
         </TextView>
 
-        <HorizontalScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/nhactre">
-                    </ImageView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top 100 nhạc trẻ"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-
-                </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginEnd="15dp">
-
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="0sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/pop"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Top 100 Pop Âu Mỹ"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp">
-                </TextView>
-            </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/edm"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top 100 EDM"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-                </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginEnd="15dp">
-
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="0sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/rapviet"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Top 100 Rap Việt"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp">
-                </TextView>
-            </LinearLayout>
-
-
-                </LinearLayout>
-            </HorizontalScrollView>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/LstViewTop100"
+            />
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="wrap_content"
@@ -381,125 +200,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" Top nghệ sĩ được yêu thích nhất  >"
+            android:text=" Top nghệ sĩ được yêu thích nhất "
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
 
         </TextView>
 
-        <HorizontalScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/wrenevan">
-                    </ImageView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Wren Evans"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-                </LinearLayout>
-           
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/lowg"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Low G"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-                </LinearLayout>
-                
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/phuongly"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phương Ly"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginEnd="15dp">
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="15sp"
-                        android:layout_marginEnd="0sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/noophuocthinh" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Noo Phước Thịnh"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp">
-                    </TextView>
-                </LinearLayout>
-
-
-
-                </LinearLayout>
-        </HorizontalScrollView>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/LstViewTopSinger"
+            />
 
     </LinearLayout>
 </ScrollView>

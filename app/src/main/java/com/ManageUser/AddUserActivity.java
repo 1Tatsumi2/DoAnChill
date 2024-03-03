@@ -250,6 +250,7 @@ public class AddUserActivity extends AppCompatActivity {
     }
     public void onBackPressed() {
         super.onBackPressed();
+
         startActivity(new Intent(AddUserActivity.this, ManageUserActivity.class));
         finish();
     }

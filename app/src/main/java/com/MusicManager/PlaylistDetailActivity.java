@@ -25,6 +25,8 @@ import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -35,23 +37,28 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlaylistDetailActivity extends AppCompatActivity {
 
-    TextView numSong,name,desc;
+    TextView numSong,name,desc,author;
     ImageView image;
     Button addMusic;
     String key;
     List<Song> songArrayList;
     ListView lvSongs;
     SongsAdapter songsAdapter;
+    FirebaseAuth fAuth;
+    String UserID,ID,role,rolePlay;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference refUser=db.collection("users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_detail);
         numSong=findViewById(R.id.detailPlaylistNumSong);
         name=findViewById(R.id.detailPLaylistName);
+        author=findViewById(R.id.detailPLaylistAuthor);
         desc=findViewById(R.id.detailPlaylistDesc);
         image=findViewById(R.id.detailPlaylistImage);
         lvSongs = findViewById(R.id.lvPlaylistSong);
@@ -59,15 +66,45 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         songArrayList = new ArrayList<>();
         songsAdapter = new SongsAdapter(this, songArrayList);
         lvSongs.setAdapter(songsAdapter);
+        fAuth=FirebaseAuth.getInstance();
+        UserID=fAuth.getCurrentUser().getUid();
         showAllSongs();
         Intent intent=getIntent();
         Bundle extraData=intent.getExtras();
         key=extraData.getString("key");
+        DocumentReference UserRef=refUser.document(UserID);
         DocumentReference ref=db.collection("Playlist").document(key);
         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-
+                documentSnapshot.getDocumentReference("author").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(Objects.equals(documentSnapshot.getString("role"), "Admin") || Objects.equals(documentSnapshot.getString("role"), "Moderator"))
+                        {
+                            author.setText("DoAnChill");
+                        }
+                        else {
+                            author.setText(documentSnapshot.getString("fName"));
+                        }
+                        rolePlay=documentSnapshot.getString("role");
+                        ID=documentSnapshot.getId();
+                        if(!Objects.equals(UserID, ID))
+                        {
+                            addMusic.setVisibility(View.GONE);
+                            UserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    role=documentSnapshot.getString("role");
+                                     if((Objects.equals(rolePlay, "Admin") || Objects.equals(rolePlay, "Moderator"))&&(Objects.equals(role, "Admin") || Objects.equals(role, "Moderator")))
+                                     {
+                                         addMusic.setVisibility(View.VISIBLE);
+                                     }
+                                }
+                            });
+                        }
+                    }
+                });
                 name.setText(documentSnapshot.getString("name"));
                 desc.setText(documentSnapshot.getString("description"));
                 Double k=documentSnapshot.getDouble("songNumber");
@@ -125,7 +162,6 @@ public class PlaylistDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(PlaylistDetailActivity.this, PlaylistManagerActivity.class));
         finish();
     }
     public void showAllSongs() {

@@ -134,12 +134,14 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                 Intent i=new Intent(PlaylistManagerActivity.this, PlaylistDetailActivity.class);
                 i.putExtra("key",playlist.getKey());
                 startActivity(i);
+                finish();
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PlaylistManagerActivity.this,AddPlaylistActivity.class));
+                finish();
             }
         });
     }
@@ -154,5 +156,11 @@ public class PlaylistManagerActivity extends AppCompatActivity {
     }
     public void showPlaylist() {
         playlistAdapter.searchPlaylist((ArrayList<Playlist>) playlistArrayList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
