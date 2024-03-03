@@ -24,7 +24,7 @@
             android:textSize="40sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userImage"
+            android:id="@+id/modUserImage"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:layout_width="150dp"
@@ -35,7 +35,7 @@
             android:src="@drawable/sangtran"/>
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/modUsername"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="@drawable/edittext_background"
@@ -48,7 +48,7 @@
             android:textColor="#d0d1d4" />
 
         <EditText
-            android:id="@+id/emailid"
+            android:id="@+id/modEmail"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:background="@drawable/edittext_background"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
         <EditText
-            android:id="@+id/passwordps"
+            android:id="@+id/modPassword"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:background="@drawable/edittext_background"
@@ -78,10 +78,36 @@
             android:textColorHint="#d0d1d4" />
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Moderator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.361"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/isMod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
-            android:id="@+id/add"
-            android:layout_width="353dp"
-            android:layout_height="60dp"
+            android:id="@+id/modAddUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="Add"
             android:textSize="23dp"

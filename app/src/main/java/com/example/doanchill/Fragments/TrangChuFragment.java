@@ -41,9 +41,9 @@ import java.util.Timer;
 public class TrangChuFragment extends Fragment {
 ;;
     private ViewPager slider;
-    RecyclerView Playlists,Top100,TopSinger;
-    PlaylistMainAdapter playlistMainAdapter,playlistTop100Adapter,getPlaylistTopSingerAdapter;
-    List<com.example.doanchill.Class.Playlist> playlistList,playlistsTop100,playlistsTopSinger;
+    RecyclerView Playlists,Top100,TopSinger,MyPlaylist;
+    PlaylistMainAdapter playlistMainAdapter,playlistTop100Adapter,getPlaylistTopSingerAdapter,myPlaylistAdapter;
+    List<com.example.doanchill.Class.Playlist> playlistList,playlistsTop100,playlistsTopSinger,myPlaylist;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
     CollectionReference refUser=db.collection("users");
@@ -72,6 +72,7 @@ public class TrangChuFragment extends Fragment {
         Playlists=view.findViewById(R.id.LstViewPlay);
         Top100=view.findViewById(R.id.LstViewTop100);
         TopSinger=view.findViewById(R.id.LstViewTopSinger);
+        MyPlaylist=view.findViewById(R.id.LstViewMyplaylist);
         //Playlist
         playlistList=new ArrayList<>();
         Playlists.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
@@ -89,6 +90,12 @@ public class TrangChuFragment extends Fragment {
         TopSinger.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         getPlaylistTopSingerAdapter=new PlaylistMainAdapter(Playlists.getContext(), playlistsTopSinger);
         TopSinger.setAdapter(getPlaylistTopSingerAdapter);
+
+        //My Playlist
+        myPlaylist=new ArrayList<>();
+        MyPlaylist.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        myPlaylistAdapter=new PlaylistMainAdapter(Playlists.getContext(), myPlaylist);
+        MyPlaylist.setAdapter(myPlaylistAdapter);
 
         UserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -121,12 +128,14 @@ public class TrangChuFragment extends Fragment {
                             else if (Objects.equals(documentSnapshot.getString("classified"), "My Playlist"))
                             {
                                 Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                                playlist.setKey(documentSnapshot.getId());
                                 playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if(documentSnapshot.getId().equals(UserID))
                                         {
-                                            Log.d("SOSS",UserID );
+                                            myPlaylist.add(playlist);
+                                            myPlaylistAdapter.notifyDataSetChanged();
                                         }
                                     }
                                 });

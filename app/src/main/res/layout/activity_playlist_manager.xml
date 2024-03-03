@@ -27,11 +27,20 @@
             android:background="@drawable/lavender_border"
             app:searchIcon="@drawable/baseline_manage_search_24"/>
 
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerPlaylist"
+            android:layout_below="@id/searchPlaylist"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"/>
+
         <ListView
             android:id="@+id/lvPlaylists"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/searchPlaylist"/>
+            android:layout_below="@id/spinnerPlaylist"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddPlaylist"

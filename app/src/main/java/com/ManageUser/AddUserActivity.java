@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,8 @@ public class AddUserActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     String UserID;
     Uri uriImage;
-    String imageUrl;
+    String imageUrl,role;
+    Switch modSwitch;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
@@ -65,11 +67,12 @@ public class AddUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
 
-        Email = findViewById(R.id.emailid);
-        Password = findViewById(R.id.passwordps);
-        Add = findViewById(R.id.add);
-        Username=findViewById(R.id.username);
-        image=findViewById(R.id.userImage);
+        Email = findViewById(R.id.modEmail);
+        Password = findViewById(R.id.modPassword);
+        Add = findViewById(R.id.modAddUser);
+        Username=findViewById(R.id.modUsername);
+        image=findViewById(R.id.modUserImage);
+        modSwitch=findViewById(R.id.isMod);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
@@ -171,7 +174,14 @@ public class AddUserActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful())
                                 {
-
+                                    if(modSwitch.isChecked())
+                                    {
+                                        role="Moderator";
+                                    }
+                                    else
+                                    {
+                                        role="User";
+                                    }
                                     Toast.makeText(AddUserActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
                                     UserID=mAuth.getCurrentUser().getUid();
                                     DocumentReference documentReference= fStore.collection("users").document(UserID);
@@ -179,7 +189,7 @@ public class AddUserActivity extends AppCompatActivity {
                                     users.put("fName",name);
                                     users.put("email",user);
                                     users.put("image",imageUrl);
-                                    users.put("role","User");
+                                    users.put("role",role);
                                     documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
@@ -193,11 +203,13 @@ public class AddUserActivity extends AppCompatActivity {
                             }
                         });
                         dialog.dismiss();
+                        finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         dialog.dismiss();
+                        finish();
                     }
                 });
             }
