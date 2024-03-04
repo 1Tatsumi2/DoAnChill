@@ -76,12 +76,14 @@ public class SettingUserFragment extends Fragment {
         settingAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 startActivity(new Intent(getActivity(), SettingAccActivity.class));
             }
         });
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 Intent i=new Intent(getActivity(), PlaylistManagerActivity.class);
                 startActivity(i);
             }

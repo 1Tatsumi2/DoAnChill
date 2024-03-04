@@ -62,8 +62,8 @@ public class SettingAccActivity extends AppCompatActivity {
         });
         if(user.isEmailVerified())
         {
-           verfiyNofi.setVisibility(View.INVISIBLE);
-           verifySend.setVisibility(View.INVISIBLE);
+           verfiyNofi.setVisibility(View.GONE);
+           verifySend.setVisibility(View.GONE);
         }
         else {
             verifySend.setOnClickListener(new View.OnClickListener() {
