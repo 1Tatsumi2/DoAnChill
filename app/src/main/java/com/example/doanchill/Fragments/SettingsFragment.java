@@ -87,18 +87,21 @@ public class SettingsFragment extends Fragment {
         settingAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 startActivity(new Intent(getActivity(), SettingAccActivity.class));
             }
         });
         manageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 startActivity(new Intent(getActivity(), ManageUserActivity.class));
             }
         });
         musicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 Intent i=new Intent(getActivity(), MusicManagerActivity.class);
                 startActivity(i);
             }
@@ -106,6 +109,7 @@ public class SettingsFragment extends Fragment {
         managePlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registration.remove();
                 Intent i=new Intent(getActivity(), PlaylistManagerActivity.class);
                 startActivity(i);
             }
