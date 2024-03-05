@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/editText"
     android:gravity="center_horizontal"
     tools:context=".MusicPlayerActivity">
+
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,8 +44,8 @@
         android:layout_height="300dp"
         android:id="@+id/tvImage"
         android:layout_marginTop="30dp"
-        android:src="@drawable/img"
         android:layout_centerInParent="true"
+        android:src="@drawable/img"
         app:civ_border_color="#000000"
         app:civ_border_width="2dp">
 

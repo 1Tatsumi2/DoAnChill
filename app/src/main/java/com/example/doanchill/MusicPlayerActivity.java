@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.session.MediaSession;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -124,6 +126,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+
         Song song = (Song) getIntent().getSerializableExtra("song");
         tvTime = findViewById(R.id.tvTime);
         tvImage=findViewById(R.id.tvImage);
@@ -145,11 +149,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         objectAnimator.setInterpolator(new LinearInterpolator());
         objectAnimator.start();
         layout = findViewById(R.id.layout);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
-//        int pixel = bitmap.getPixel(0, 0);
-//        int backgroundColor = Color.argb(255, Color.red(pixel), Color.green(pixel), Color.blue(pixel));
-//        layout.setBackgroundColor(backgroundColor);
-//        updateBackgroundColor(currentImageUri);
+
+
+
 
 
         if(mMediaPlayer!=null)
@@ -216,19 +218,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         });
     }//end main
 
-    private void updateBackgroundColor(String imageUri) {
-        if (imageUri != null && !imageUri.isEmpty()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imageUri);
-            int pixel = bitmap.getPixel(0, 0);
-            int backgroundColor = Color.argb(255, Color.red(pixel), Color.green(pixel), Color.blue(pixel));
-            layout.setBackgroundColor(backgroundColor);
-        }
-    }
 
-    private void selectNewDisc(String newImageUri) {
-        currentImageUri = newImageUri;
-        updateBackgroundColor(newImageUri);
-    }
+
+
 
 
     @Override
