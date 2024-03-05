@@ -33,16 +33,19 @@ public class SettingAccActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     Button verifySend,editBtn;
-    ImageView back;
+    ImageView back,image;
     AppCompatButton logOut;
     ListenerRegistration registration;
-    TextView verfiyNofi,userName;
+    TextView verfiyNofi,userName,emailUser;
     String userID,name,email,imageUrl,role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_acc);
         back = findViewById(R.id.btnBack);
+        userName=findViewById(R.id.InfoUserName);
+        image=findViewById(R.id.InfoUserImage);
+        emailUser=findViewById(R.id.InfoUserEmail);
         verfiyNofi=findViewById(R.id.verifyNofi);
         verifySend=findViewById(R.id.verify);
         editBtn=findViewById(R.id.editProfile);
@@ -58,6 +61,9 @@ public class SettingAccActivity extends AppCompatActivity {
                 email=(value.getString("email"));
                 imageUrl=value.getString("image");
                 role=value.getString("role");
+                userName.setText(name);
+                emailUser.setText(email);
+                Glide.with(SettingAccActivity.this).load(imageUrl).into(image);
             }
         });
         if(user.isEmailVerified())
