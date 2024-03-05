@@ -24,6 +24,7 @@ import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
+import com.example.doanchill.Playlist.EditPlaylistActivity;
 import com.example.doanchill.Playlist.PlaylistManagerActivity;
 import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,7 +50,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
 
     TextView numSong,name,desc,author;
     ImageView image;
-    Button addMusic,deleteMusic;
+    Button addMusic,deleteMusic,editPlaylist;
     String key,imageToDelete;
     List<Song> songArrayList;
     ListView lvSongs;
@@ -59,6 +60,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     DocumentReference ref;
     CollectionReference refUser=db.collection("users");
+    Playlist playlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         desc=findViewById(R.id.detailPlaylistDesc);
         image=findViewById(R.id.detailPlaylistImage);
         deleteMusic=findViewById(R.id.DeletePlaylist);
+        editPlaylist=findViewById(R.id.EditPlaylist);
         lvSongs = findViewById(R.id.lvPlaylistSong);
         addMusic=findViewById(R.id.addMusicToPlaylist);
         songArrayList = new ArrayList<>();
@@ -86,6 +89,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                playlist=documentSnapshot.toObject(Playlist.class);
                 documentSnapshot.getDocumentReference("author").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -158,6 +162,20 @@ public class PlaylistDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 confirmDelete();
+            }
+        });
+        editPlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(PlaylistDetailActivity.this, EditPlaylistActivity.class);
+                i.putExtra("name",playlist.getName());
+                i.putExtra("description",playlist.getDescription());
+                i.putExtra("public",playlist.getPublic());
+                i.putExtra("classified",playlist.getClassified());
+                i.putExtra("image",playlist.getImage());
+                i.putExtra("key",key);
+                startActivity(i);
+                finish();
             }
         });
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {

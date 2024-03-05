@@ -105,6 +105,7 @@ public class AddPlaylistActivity extends AppCompatActivity {
                  ArrayList<String> arrayList=new ArrayList<>();
                  arrayList.add("Playlist");
                  arrayList.add("Top 100");
+                 arrayList.add("Explore");
                  arrayList.add("Top Singer");
                  arrayList.add("My Playlist");
                  ArrayAdapter<String> adapter=new ArrayAdapter<>(AddPlaylistActivity.this, android.R.layout.simple_spinner_item,arrayList);

@@ -3,6 +3,7 @@ package com.example.doanchill.Models;
 public class SliderModel {
 
     private String image;
+    private String key;
 
     public SliderModel(String image)
     {
@@ -10,6 +11,14 @@ public class SliderModel {
     }
 
     public SliderModel() {
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getImage() {

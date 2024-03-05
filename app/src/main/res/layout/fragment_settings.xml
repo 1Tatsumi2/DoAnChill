@@ -142,6 +142,25 @@
                         android:textAlignment="viewStart" />
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/ManageBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        style="@android:style/Widget.Button"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_background_1"
+                        android:drawableStart="@drawable/ic_manage"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="Manage Banner"
+                        android:textColor="@color/black"
+                        android:textAlignment="viewStart" />
+
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/Logout"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"

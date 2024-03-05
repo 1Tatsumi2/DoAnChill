@@ -182,7 +182,7 @@ public class AddUserActivity extends AppCompatActivity {
                                     {
                                         role="User";
                                     }
-                                    Toast.makeText(AddUserActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddUserActivity.this,"Add user Successful",Toast.LENGTH_SHORT).show();
                                     UserID=mAuth.getCurrentUser().getUid();
                                     DocumentReference documentReference= fStore.collection("users").document(UserID);
                                     Map<String,Object> users=new HashMap<>();
@@ -196,14 +196,14 @@ public class AddUserActivity extends AppCompatActivity {
                                         }
                                     });
                                     startActivity(new Intent(AddUserActivity.this,ManageUserActivity.class));
+                                    dialog.dismiss();
+                                    finish();
                                 }
                                 else {
                                     Toast.makeText(AddUserActivity.this,"SignUp Failed" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-                        dialog.dismiss();
-                        finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

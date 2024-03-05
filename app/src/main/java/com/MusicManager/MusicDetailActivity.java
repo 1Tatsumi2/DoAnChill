@@ -14,6 +14,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -179,6 +180,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                         .putExtra("Audio",song.getPath())
                         .putExtra("Key",song.getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
+                mMediaPlayer.stop();
                 startActivity(intent);
                 finish();
             }
@@ -234,6 +236,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                 //xóa file audio và image cũ(not done)
                 ref.delete();
                 Toast.makeText(MusicDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
+                mMediaPlayer.stop();
                 startActivity(new Intent(MusicDetailActivity.this, MusicManagerActivity.class));
                 finish();
             }

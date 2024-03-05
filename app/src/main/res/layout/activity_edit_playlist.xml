@@ -9,7 +9,7 @@
     tools:context=".Playlist.EditPlaylistActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/uploadImagePlaylist"
+        android:id="@+id/EditImagePlaylist"
         android:layout_marginTop="15dp"
         android:layout_width="120dp"
         android:layout_height="120dp"

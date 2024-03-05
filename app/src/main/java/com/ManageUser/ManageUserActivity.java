@@ -40,17 +40,14 @@ public class ManageUserActivity extends AppCompatActivity {
     List<Users> usersList;
     ListView lvUsers;
     SearchView searchView;
-    FloatingActionButton fab;
     UserAdapter userAdapter;
     FirebaseFirestore fStore;
-    String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_user);
         lvUsers=findViewById(R.id.lvUsers);
         searchView=findViewById(R.id.searchUser);
-        fab=findViewById(R.id.fabUser);
         usersList=new ArrayList<>();
         userAdapter=new UserAdapter(this,1,usersList);
         lvUsers.setAdapter(userAdapter);
@@ -86,13 +83,6 @@ public class ManageUserActivity extends AppCompatActivity {
                 return true;
             }
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ManageUserActivity.this,AddUserActivity.class));
-                finish();
-            }
-        });
         lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -101,13 +91,6 @@ public class ManageUserActivity extends AppCompatActivity {
                 i.putExtra("user", users);
                 i.putExtra("key",users.getKey());
                 startActivity(i);
-                finish();
-            }
-        });
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ManageUserActivity.this, AddUserActivity.class));
                 finish();
             }
         });
@@ -124,5 +107,10 @@ public class ManageUserActivity extends AppCompatActivity {
 
     public void showAllUser() {
         userAdapter.searchLst((ArrayList<Users>) usersList);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
