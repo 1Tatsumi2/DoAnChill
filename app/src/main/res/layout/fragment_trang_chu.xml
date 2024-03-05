@@ -25,51 +25,12 @@
 
         </TextView>
 
-
-        <HorizontalScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="15sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/sontung"
-
-                    />
-                <ImageView
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="15sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/mono2"/>
-                <ImageView
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="15sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/erik"/>
-                <ImageView
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginEnd="15sp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/amee"/>
-
-            </LinearLayout>
-        </HorizontalScrollView>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/LstViewExplore"
+            />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,11 +56,11 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/slider"
                 android:layout_width="411dp"
-                android:layout_height="119dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="SpeakableTextPresentCheck">
 

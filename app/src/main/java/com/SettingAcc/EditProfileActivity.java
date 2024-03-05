@@ -215,6 +215,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void unused) {
                             startActivity(new Intent(EditProfileActivity.this, SignInActivity.class));
+
                             finish();
                             fAuth.signOut();
                         }

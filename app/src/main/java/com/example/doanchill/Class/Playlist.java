@@ -39,6 +39,14 @@ public class Playlist implements Serializable {
         this.classified=classified;
     }
 
+    public Playlist(String name, String description, Boolean isPublic,String image,String classified) {
+        this.name = name;
+        this.description = description;
+        this.isPublic = isPublic;
+        this.image=image;
+        this.classified=classified;
+    }
+
     public String getClassified() {
         return classified;
     }

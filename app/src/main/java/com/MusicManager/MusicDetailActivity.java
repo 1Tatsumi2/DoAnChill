@@ -179,6 +179,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                         .putExtra("Audio",song.getPath())
                         .putExtra("Key",song.getKey())
                         .putExtra("Duration",mMediaPlayer.getDuration());
+                mMediaPlayer.stop();
                 startActivity(intent);
                 finish();
             }
@@ -234,6 +235,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                 //xóa file audio và image cũ(not done)
                 ref.delete();
                 Toast.makeText(MusicDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
+                mMediaPlayer.stop();
                 startActivity(new Intent(MusicDetailActivity.this, MusicManagerActivity.class));
                 finish();
             }

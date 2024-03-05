@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.ManageUser.ManageUserActivity;
 import com.ManageUser.UserDetailActivity;
+import com.SettingAcc.EditProfileActivity;
+import com.SettingAcc.SettingAccActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Fragments.SettingsFragment;

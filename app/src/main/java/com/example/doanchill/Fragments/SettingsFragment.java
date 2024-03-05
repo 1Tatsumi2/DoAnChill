@@ -18,6 +18,7 @@ import com.ManageUser.ManageUserActivity;
 import com.MusicManager.MusicManagerActivity;
 import com.SettingAcc.SettingAccActivity;
 import com.bumptech.glide.Glide;
+import com.example.doanchill.Banner.BannerManagerActivity;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.Playlist.AddPlaylistActivity;
 import com.example.doanchill.Playlist.PlaylistManagerActivity;
@@ -37,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsFragment extends Fragment {
     AppCompatButton musicBtn;
-    AppCompatButton logOut,settingAcc,manageUser,managePlaylist;
+    AppCompatButton logOut,settingAcc,manageUser,managePlaylist,manageBanner;
     CircleImageView image;
     TextView name, email;
     FirebaseAuth fAuth;
@@ -63,6 +64,7 @@ public class SettingsFragment extends Fragment {
         image=view.findViewById(R.id.imageView5);
         manageUser=view.findViewById(R.id.ManageUser);
         managePlaylist=view.findViewById(R.id.ManagePlaylist);
+        manageBanner=view.findViewById(R.id.ManageBanner);
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
 
@@ -111,6 +113,14 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 registration.remove();
                 Intent i=new Intent(getActivity(), PlaylistManagerActivity.class);
+                startActivity(i);
+            }
+        });
+        manageBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registration.remove();
+                Intent i=new Intent(getActivity(), BannerManagerActivity.class);
                 startActivity(i);
             }
         });

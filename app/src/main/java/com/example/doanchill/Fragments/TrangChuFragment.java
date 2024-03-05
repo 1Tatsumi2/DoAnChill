@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.doanchill.Adapters.ExploreAdapter;
 import com.example.doanchill.Adapters.PlaylistMainAdapter;
 import com.example.doanchill.Adapters.SliderAdapter;
 import com.example.doanchill.Class.Playlist;
@@ -41,9 +42,10 @@ import java.util.Timer;
 public class TrangChuFragment extends Fragment {
 ;;
     private ViewPager slider;
-    RecyclerView Playlists,Top100,TopSinger,MyPlaylist;
+    RecyclerView Playlists,Top100,TopSinger,MyPlaylist,Explore;
     PlaylistMainAdapter playlistMainAdapter,playlistTop100Adapter,getPlaylistTopSingerAdapter,myPlaylistAdapter;
-    List<com.example.doanchill.Class.Playlist> playlistList,playlistsTop100,playlistsTopSinger,myPlaylist;
+    ExploreAdapter exploreAdapter;
+    List<com.example.doanchill.Class.Playlist> playlistList,playlistsTop100,playlistsTopSinger,myPlaylist,explorePlaylist;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
     CollectionReference refUser=db.collection("users");
@@ -74,6 +76,12 @@ public class TrangChuFragment extends Fragment {
         Top100=view.findViewById(R.id.LstViewTop100);
         TopSinger=view.findViewById(R.id.LstViewTopSinger);
         MyPlaylist=view.findViewById(R.id.LstViewMyplaylist);
+        Explore=view.findViewById(R.id.LstViewExplore);
+        //Explore
+        explorePlaylist=new ArrayList<>();
+        Explore.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        exploreAdapter=new ExploreAdapter(Playlists.getContext(), explorePlaylist);
+        Explore.setAdapter(exploreAdapter);
         //Playlist
         playlistList=new ArrayList<>();
         Playlists.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
@@ -140,6 +148,12 @@ public class TrangChuFragment extends Fragment {
                                         }
                                     }
                                 });
+                            }
+                            else if (Objects.equals(documentSnapshot.getString("classified"), "Explore")) {
+                                Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                                playlist.setKey(documentSnapshot.getId());
+                                explorePlaylist.add(playlist);
+                                exploreAdapter.notifyDataSetChanged();
                             }
                         }
                     }

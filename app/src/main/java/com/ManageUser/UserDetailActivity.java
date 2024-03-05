@@ -53,6 +53,10 @@ public class UserDetailActivity extends AppCompatActivity {
         detailEmail.setText(users1.getEmail());
         detailRole.setText(users1.getRole());
         Glide.with(this).load(users1.getImage()).into(detailImage);
+        if(Objects.equals(users1.getRole(), "Admin"))
+        {
+            changeRole.setVisibility(View.GONE);
+        }
         changeRole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
