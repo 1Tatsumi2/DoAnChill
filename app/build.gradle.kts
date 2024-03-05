@@ -64,7 +64,6 @@ dependencies {
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
-
     //crop image
     implementation("com.github.yalantis:ucrop:2.2.8")
     implementation("androidx.activity:activity:1.4.0")
