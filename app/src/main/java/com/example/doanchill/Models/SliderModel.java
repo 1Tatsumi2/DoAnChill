@@ -2,28 +2,21 @@ package com.example.doanchill.Models;
 
 public class SliderModel {
 
-    private int Image;
-    private String slideName;
+    private String image;
 
-    public SliderModel(int image, String slideName)
+    public SliderModel(String image)
     {
-        Image = image;
-        this.slideName = slideName;
+        this.image = image;
     }
 
-    public int getImage(){
-        return Image;
+    public SliderModel() {
     }
 
-    public void setImage(int image){
-        Image = image;
+    public String getImage() {
+        return image;
     }
 
-    public String getSlideName(){
-        return slideName;
-    }
-
-    public void setSlideName(String slideName){
-        this.slideName = slideName;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

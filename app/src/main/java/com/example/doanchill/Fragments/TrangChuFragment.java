@@ -47,9 +47,10 @@ public class TrangChuFragment extends Fragment {
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Playlist");
     CollectionReference refUser=db.collection("users");
+    CollectionReference bannerRef=db.collection("banner");
     FirebaseAuth fAuth;
     String UserID;
-    private ArrayList<SliderModel> sliderModelList;
+    private List<SliderModel> sliderModelList;
     private SliderAdapter sliderAdapter;
     private TabLayout sliderIndicator;
     private Timer timer;
@@ -145,18 +146,25 @@ public class TrangChuFragment extends Fragment {
                 });
             }
         });
-
         sliderModelList = new ArrayList<>();
-        timer = new Timer();
-
-        sliderModelList.add(new SliderModel(R.drawable.karik,"Playlist #1"));
-        sliderModelList.add(new SliderModel(R.drawable.tlinh,"Playlist #2"));
-        sliderModelList.add(new SliderModel(R.drawable.binz,"Playlist #3"));
-        sliderModelList.add(new SliderModel(R.drawable.poster4,"Playlist #4"));
-
         sliderAdapter = new SliderAdapter(getContext(),sliderModelList);
         slider.setAdapter(sliderAdapter);
         sliderIndicator.setupWithViewPager(slider);
+        bannerRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
+                {
+                    SliderModel sliderModel=documentSnapshot.toObject(SliderModel.class);
+                    sliderModelList.add(sliderModel);
+                    sliderAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        timer = new Timer();
+
+
 
         timer.scheduleAtFixedRate(new SliderTimer(getActivity(),slider,sliderModelList.size()),4000,6000);
 
