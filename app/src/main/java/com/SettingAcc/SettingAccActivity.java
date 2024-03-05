@@ -36,7 +36,7 @@ public class SettingAccActivity extends AppCompatActivity {
     ImageView back;
     AppCompatButton logOut;
     ListenerRegistration registration;
-    TextView verfiyNofi;
+    TextView verfiyNofi,userName;
     String userID,name,email,imageUrl,role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

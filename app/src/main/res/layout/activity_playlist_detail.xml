@@ -53,15 +53,35 @@
             android:id="@+id/detailPlaylistDesc"
             android:text="demo"
             />
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add music"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="80dp"
-            android:id="@+id/addMusicToPlaylist"
-            />
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add music"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/addMusicToPlaylist"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/EditPlaylist"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_marginTop="10dp"
+                android:id="@+id/DeletePlaylist"
+                />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lvPlaylistSong"

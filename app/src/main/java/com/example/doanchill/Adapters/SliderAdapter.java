@@ -1,6 +1,7 @@
 package com.example.doanchill.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +9,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Models.SliderModel;
 import com.example.doanchill.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SliderAdapter extends PagerAdapter {
 
     private Context context;
-    private ArrayList<SliderModel> sliderModelList;
+    private List<SliderModel> sliderModelList;
 
-    public SliderAdapter(Context context, ArrayList<SliderModel> sliderModelList){
+    public SliderAdapter(Context context, List<SliderModel> sliderModelList){
         this.context = context;
-        this.sliderModelList = sliderModelList;
+        this.sliderModelList =sliderModelList;
     }
+
 
     @NonNull
     @Override
@@ -33,7 +39,7 @@ public class SliderAdapter extends PagerAdapter {
 
         ImageView sliderImage = view.findViewById(R.id.slider_image);
 
-        sliderImage.setImageResource(sliderModelList.get(position).getImage());
+        Glide.with(context).load(sliderModelList.get(position).getImage()).into(sliderImage);
 
         container.addView(view);
         return view;

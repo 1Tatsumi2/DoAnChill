@@ -1,8 +1,10 @@
 package com.MusicManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ManageUser.ManageUserActivity;
 import com.ManageUser.UserDetailActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Adapters.SongsAdapter;
+import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
@@ -31,6 +35,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -43,14 +49,15 @@ public class PlaylistDetailActivity extends AppCompatActivity {
 
     TextView numSong,name,desc,author;
     ImageView image;
-    Button addMusic;
-    String key;
+    Button addMusic,deleteMusic;
+    String key,imageToDelete;
     List<Song> songArrayList;
     ListView lvSongs;
     SongsAdapter songsAdapter;
     FirebaseAuth fAuth;
     String UserID,ID,role,rolePlay;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
+    DocumentReference ref;
     CollectionReference refUser=db.collection("users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         author=findViewById(R.id.detailPLaylistAuthor);
         desc=findViewById(R.id.detailPlaylistDesc);
         image=findViewById(R.id.detailPlaylistImage);
+        deleteMusic=findViewById(R.id.DeletePlaylist);
         lvSongs = findViewById(R.id.lvPlaylistSong);
         addMusic=findViewById(R.id.addMusicToPlaylist);
         songArrayList = new ArrayList<>();
@@ -72,6 +80,7 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         Intent intent=getIntent();
         Bundle extraData=intent.getExtras();
         key=extraData.getString("key");
+        imageToDelete=extraData.getString("playlist");
         DocumentReference UserRef=refUser.document(UserID);
         DocumentReference ref=db.collection("Playlist").document(key);
         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -145,6 +154,12 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+        deleteMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDelete();
+            }
+        });
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -159,6 +174,41 @@ public class PlaylistDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void confirmDelete() {
+        String[] options={"Yes","No"};
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Do you want to delete this playlist?");
+        //set items/options
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //handle click
+                if(which==0)
+                {
+                    deleteSong();
+                }
+                else if(which==1)
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
+        //create/show dialog
+        builder.create().show();
+    }
+
+    private void deleteSong() {
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        StorageReference imageReference = storage.getReferenceFromUrl(imageToDelete);
+         imageReference.delete();
+
+        ref=db.collection("Playlist").document(key);
+        ref.delete();
+        Toast.makeText(PlaylistDetailActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

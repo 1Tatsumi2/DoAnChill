@@ -120,7 +120,7 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             String item=parent.getItemAtPosition(position).toString();
                             classified=item;
-                            if (classified!="Sort by")
+                            if (!classified.equals("Sort by"))
                             {
                                 sortBy(classified);
                             }
@@ -167,6 +167,7 @@ public class PlaylistManagerActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Playlist playlist=playlistAdapter.getItem(position);
                 Intent i=new Intent(PlaylistManagerActivity.this, PlaylistDetailActivity.class);
+                i.putExtra("playlist",playlist.getImage());
                 i.putExtra("key",playlist.getKey());
                 startActivity(i);
                 finish();

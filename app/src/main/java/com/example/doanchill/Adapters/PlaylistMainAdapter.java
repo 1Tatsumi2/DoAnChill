@@ -69,6 +69,7 @@ public class PlaylistMainAdapter extends RecyclerView.Adapter<PlaylistMainAdapte
                 public void onClick(View v) {
                     int position=getAdapterPosition();
                     Intent i=new Intent(context, PlaylistDetailActivity.class);
+                    i.putExtra("playlist",playlist.getImage());
                     i.putExtra("key",playlist.getKey());
                     context.startActivity(i);
                 }
