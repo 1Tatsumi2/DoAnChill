@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -21,6 +23,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.session.MediaSession;
 import android.net.Uri;
@@ -35,6 +38,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -71,6 +76,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class MusicPlayerActivity extends AppCompatActivity implements ActionPlaying,ServiceConnection {
     // views declaration
@@ -78,7 +85,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;
     int position;
-    ImageView nextBtn, previousBtn,tvImage,back;
+    ImageView nextBtn, previousBtn,back;
+    CircleImageView tvImage;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
     Button btnPlay;
@@ -90,6 +98,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     MusicService musicService;
     MediaSessionCompat mediaSession;
     AdView mAdView;
+    ObjectAnimator objectAnimator;
+    LinearLayout layout;
+    String currentImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +138,20 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         back = findViewById(R.id.btnBack1);
         dotbutton = findViewById(R.id.dotbutton);
         mediaSession=new MediaSessionCompat(this,"PlayerAudio");
+        objectAnimator = ObjectAnimator.ofFloat(tvImage,"rotation",0f,360f);
+        objectAnimator.setDuration(30000);
+        objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        objectAnimator.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimator.setInterpolator(new LinearInterpolator());
+        objectAnimator.start();
+        layout = findViewById(R.id.layout);
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+//        int pixel = bitmap.getPixel(0, 0);
+//        int backgroundColor = Color.argb(255, Color.red(pixel), Color.green(pixel), Color.blue(pixel));
+//        layout.setBackgroundColor(backgroundColor);
+//        updateBackgroundColor(currentImageUri);
+
+
         if(mMediaPlayer!=null)
         {
             mMediaPlayer.stop();
@@ -190,6 +215,20 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             }
         });
     }//end main
+
+    private void updateBackgroundColor(String imageUri) {
+        if (imageUri != null && !imageUri.isEmpty()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageUri);
+            int pixel = bitmap.getPixel(0, 0);
+            int backgroundColor = Color.argb(255, Color.red(pixel), Color.green(pixel), Color.blue(pixel));
+            layout.setBackgroundColor(backgroundColor);
+        }
+    }
+
+    private void selectNewDisc(String newImageUri) {
+        currentImageUri = newImageUri;
+        updateBackgroundColor(newImageUri);
+    }
 
 
     @Override
