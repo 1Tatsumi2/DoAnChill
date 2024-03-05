@@ -68,7 +68,7 @@
 
     </RelativeLayout>
     <com.google.android.material.imageview.ShapeableImageView
-        android:src="@drawable/slider"
+        android:src="@drawable/amee"
         android:elevation="15dp"
         android:padding="5dp"
         android:layout_centerHorizontal="true"
