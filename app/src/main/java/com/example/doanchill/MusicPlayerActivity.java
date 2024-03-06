@@ -59,6 +59,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.MusicManager.AddPlaylistToMusicActivity;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.doanchill.Class.Song;
@@ -79,6 +80,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
 public class MusicPlayerActivity extends AppCompatActivity implements ActionPlaying,ServiceConnection {
@@ -149,9 +151,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         objectAnimator.setInterpolator(new LinearInterpolator());
         objectAnimator.start();
         layout = findViewById(R.id.layout);
-
-
-
 
 
         if(mMediaPlayer!=null)
@@ -242,6 +241,24 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         tvTitle.setText(name);
         String singer=musicList.get(position).getSinger();
         tvArtist.setText(singer);
+        Glide.with(this)
+                .asBitmap()
+                .load(musicList.get(position).getImage())
+                .apply(new RequestOptions().transform(new BlurTransformation(75))) // Sử dụng BlurTransformation để làm mờ hình ảnh
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        // Chuyển đổi Bitmap thành Drawable
+                        Drawable drawable = new BitmapDrawable(getResources(), resource);
+
+                        // Đặt Drawable làm hình nền cho View
+                        layout.setBackground(drawable);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
         String duration = millisecondsToString(musicList.get(position).getDuration());
         Glide.with(this).load(musicList.get(position).getImage()).into(tvImage);
         tvDuration.setText(duration);
@@ -479,12 +496,14 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     public void playClicked() {
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
+            objectAnimator.pause();
             // change the image of playpause button to play when we pause it
             btnPlay.setBackgroundResource(R.drawable.ic_play);
             showNotification(R.drawable.ic_play,0F);
         } else {
             mMediaPlayer.start();
             // if mediaplayer is playing // the image of play button should display pause
+            objectAnimator.resume();
             btnPlay.setBackgroundResource(R.drawable.ic_pause);
             showNotification(R.drawable.ic_pause,0F);
         }

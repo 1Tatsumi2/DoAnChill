@@ -17,6 +17,7 @@ import com.ManageUser.UserDetailActivity;
 import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Class.Users;
+import com.example.doanchill.Fragments.SettingsFragment;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.UploadActivity;

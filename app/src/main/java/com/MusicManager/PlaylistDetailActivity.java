@@ -105,6 +105,8 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                         if(!Objects.equals(UserID, ID))
                         {
                             addMusic.setVisibility(View.GONE);
+                            editPlaylist.setVisibility(View.GONE);
+                            deleteMusic.setVisibility(View.GONE);
                             UserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -112,6 +114,8 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                                      if((Objects.equals(rolePlay, "Admin") || Objects.equals(rolePlay, "Moderator"))&&(Objects.equals(role, "Admin") || Objects.equals(role, "Moderator")))
                                      {
                                          addMusic.setVisibility(View.VISIBLE);
+                                         editPlaylist.setVisibility(View.VISIBLE);
+                                         deleteMusic.setVisibility(View.VISIBLE);
                                      }
                                 }
                             });
