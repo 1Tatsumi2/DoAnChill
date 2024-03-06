@@ -204,7 +204,7 @@ public class EditProfileActivity extends AppCompatActivity {
             user.verifyBeforeUpdateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    Toast.makeText(EditProfileActivity.this, "Verification mail has been sent", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "Verification mail has been sent, you should log out", Toast.LENGTH_SHORT).show();
                     DocumentReference documentReference=fStore.collection("users").document(user.getUid());
                     Map<String,Object> edited=new HashMap<>();
                     edited.put("email",email);
@@ -214,10 +214,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            startActivity(new Intent(EditProfileActivity.this, SignInActivity.class));
-
-                            finish();
                             fAuth.signOut();
+                            finish();
                         }
                     });
                 }

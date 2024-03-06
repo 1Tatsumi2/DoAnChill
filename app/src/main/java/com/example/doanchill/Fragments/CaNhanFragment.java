@@ -48,7 +48,6 @@ public class CaNhanFragment extends Fragment {
     SearchView searchView;
 
     SongsAdapter songsAdapter;
-    ValueEventListener valueEventListener;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Music");
     @Override

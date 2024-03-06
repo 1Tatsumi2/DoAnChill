@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 registration.remove();
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(), SignInActivity.class));
+                getActivity().finish();
             }
         });
         settingAcc.setOnClickListener(new View.OnClickListener() {

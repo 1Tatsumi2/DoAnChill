@@ -136,6 +136,7 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                     });
                     ArrayList<String> arrayList=new ArrayList<>();
                     arrayList.add("Sort by");
+                    arrayList.add("Explore");
                     arrayList.add("Playlist");
                     arrayList.add("Top 100");
                     arrayList.add("Top Singer");
