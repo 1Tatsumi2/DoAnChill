@@ -52,6 +52,8 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.os.Handler;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -66,18 +68,27 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.Interface.ActionPlaying;
 import com.example.doanchill.Interface.MusicService;
 import com.example.doanchill.Interface.NotificationReceiver;
+import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -104,7 +115,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     AdView mAdView;
     ObjectAnimator objectAnimator;
     LinearLayout layout;
-    String currentImageUri;
+    String currentImageUri,UserID;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    FirebaseAuth fAuth=FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +163,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         objectAnimator.setRepeatMode(ValueAnimator.RESTART);
         objectAnimator.setInterpolator(new LinearInterpolator());
         objectAnimator.start();
+        UserID=fAuth.getCurrentUser().getUid();
         layout = findViewById(R.id.layout);
 
 
@@ -207,6 +221,48 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
                             i.putExtra("key",key);
                             startActivity(i);
                             finish();
+                        } else if (item.getItemId()==R.id.add_to_library) {
+                            //pending
+                            DocumentReference musicRef=db.collection("Music").document(song.getKey());
+                            DocumentReference refLib=db.collection("library").document(UserID);
+                            refLib.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> library = (Map<String, Object>) documentSnapshot.get("songs");
+                                    String uniqueKey=song.getKey();
+                                    if (library != null && library.containsKey(uniqueKey)) {
+                                        // Nếu trường tồn tại, xóa nó
+                                        Map<String, Object> updates = new HashMap<>();
+                                        Double k=documentSnapshot.getDouble("songNumber");
+                                        Integer ik=k.intValue();
+                                        Integer updatedNumber=ik-1;
+                                        updates.put("songNumber",updatedNumber);
+                                        updates.put("songs." + uniqueKey, FieldValue.delete());
+
+                                        refLib.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(MusicPlayerActivity.this,"song removed from your library",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        // Nếu trường không tồn tại, thêm nó
+                                        Map<String, Object> updates = new HashMap<>();
+                                        Double k=documentSnapshot.getDouble("songNumber");
+                                        Integer ik=k.intValue();
+                                        Integer updatedNumber=ik+1;
+                                        updates.put("songNumber",updatedNumber);
+                                        updates.put("songs." + uniqueKey, musicRef);
+
+                                        refLib.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(MusicPlayerActivity.this, "Added to library", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                         }
                         return true;
                     }
@@ -227,7 +283,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         super.onBackPressed();
         finish();
     }
-
 
     private void initializeMusicPlayer(int position) {
         // if mediaplayer is not null and playing reset it at the launch of activity

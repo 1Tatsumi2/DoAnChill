@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MusicManager.UpdateActivity;
+import com.example.doanchill.Class.Library;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -203,9 +204,18 @@ public class SignUpActivity extends AppCompatActivity {
                                         documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
+                                                DocumentReference ref=fStore.collection("users").document(UserID);
+                                                Map<String,Object> library=new HashMap<>();
+                                                library.put("user",ref);
+                                                library.put("songNumber",0);
+                                                fStore.collection("library").document(UserID).set(library).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                                                    }
+                                                });
                                             }
                                         });
-                                        startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
                                     }
                                     else {
                                         Toast.makeText(SignUpActivity.this,"SignUp Failed" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();

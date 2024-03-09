@@ -123,7 +123,8 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/story">
 
     <TextView
         android:id="@+id/artistStory"
@@ -134,15 +135,15 @@
         android:textColor="#FFFFFF"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintBottom_toTopOf="@+id/imageStory"
+        app:layout_constraintEnd_toStartOf="@+id/imageStory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </TextView>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageStory"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginTop="90dp"
