@@ -1,8 +1,10 @@
 package com.example.doanchill.Fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,8 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.MusicManager.PlaylistDetailActivity;
+import com.bumptech.glide.Glide;
 import com.example.doanchill.Adapters.ExploreAdapter;
 import com.example.doanchill.Adapters.PlaylistMainAdapter;
 import com.example.doanchill.Adapters.SliderAdapter;
@@ -56,6 +62,10 @@ public class TrangChuFragment extends Fragment {
     private SliderAdapter sliderAdapter;
     private TabLayout sliderIndicator;
     private Timer timer;
+    ConstraintLayout layout;
+    TextView story;
+    ImageView imageStory;
+    String keyStory, imagestoryl;
 
 
     @Override
@@ -77,6 +87,30 @@ public class TrangChuFragment extends Fragment {
         TopSinger=view.findViewById(R.id.LstViewTopSinger);
         MyPlaylist=view.findViewById(R.id.LstViewMyplaylist);
         Explore=view.findViewById(R.id.LstViewExplore);
+        layout=view.findViewById(R.id.story);
+        story=view.findViewById(R.id.artistStory);
+        imageStory=view.findViewById(R.id.imageStory);
+        DocumentReference docRef=ref.document("jXSAzW14cqjibGREeCjw");
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Playlist playlist=documentSnapshot.toObject(Playlist.class);
+                    story.setText(playlist.getName());
+                    playlist.setKey(documentSnapshot.getId());
+                    keyStory=playlist.getKey();
+                    imagestoryl=playlist.getImage();
+                    Glide.with(getContext()).load(playlist.getImage()).into(imageStory);
+            }
+        });
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getContext(), PlaylistDetailActivity.class);
+                i.putExtra("playlist",imagestoryl);
+                i.putExtra("key",keyStory);
+                startActivity(i);
+            }
+        });
         //Explore
         explorePlaylist=new ArrayList<>();
         Explore.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));

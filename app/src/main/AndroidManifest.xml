@@ -25,6 +25,9 @@
         android:theme="@style/Theme.DoAnChill"
         tools:targetApi="31">
         <activity
+            android:name=".Library.LibraryActivity"
+            android:exported="false" />
+        <activity
             android:name=".Banner.EditBannerActivity"
             android:exported="false" />
         <activity

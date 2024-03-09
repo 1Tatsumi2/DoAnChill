@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.SettingAcc.SettingAccActivity;
 import com.bumptech.glide.Glide;
+import com.example.doanchill.Library.LibraryActivity;
 import com.example.doanchill.Playlist.PlaylistManagerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.SignInActivity;
@@ -31,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SettingUserFragment extends Fragment {
     Button Logout;
     AppCompatButton musicBtn;
-    AppCompatButton logOut,settingAcc;
+    AppCompatButton logOut,settingAcc,library;
     CircleImageView image;
     TextView name, email;
     FirebaseAuth fAuth;
@@ -52,6 +53,7 @@ public class SettingUserFragment extends Fragment {
         settingAcc=view.findViewById(R.id.UserAccount);
         musicBtn=view.findViewById(R.id.MyPlaylist);
         image=view.findViewById(R.id.profileUserImage);
+        library=view.findViewById(R.id.LibraryUser);
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
 
@@ -85,6 +87,14 @@ public class SettingUserFragment extends Fragment {
             public void onClick(View v) {
                 registration.remove();
                 Intent i=new Intent(getActivity(), PlaylistManagerActivity.class);
+                startActivity(i);
+            }
+        });
+        library.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registration.remove();
+                Intent i=new Intent(getActivity(), LibraryActivity.class);
                 startActivity(i);
             }
         });
