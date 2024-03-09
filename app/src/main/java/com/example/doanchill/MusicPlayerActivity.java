@@ -89,6 +89,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -104,7 +105,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     CircleImageView tvImage;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
-    Button btnPlay;
+    Button btnPlay,btnShuffle,btnLoop;
     String key;
     ImageButton dotbutton;
     static MediaPlayer mMediaPlayer;
@@ -118,6 +119,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     String currentImageUri,UserID;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     FirebaseAuth fAuth=FirebaseAuth.getInstance();
+    private boolean isShuffleOn = false;
+    private boolean isLoopOn = false;
+    private ArrayList<Integer> playedSongs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
 
         Song song = (Song) getIntent().getSerializableExtra("song");
+        btnShuffle=findViewById(R.id.shuffleBtn);
+        btnLoop=findViewById(R.id.LoopBtn);
         tvTime = findViewById(R.id.tvTime);
         tvImage=findViewById(R.id.tvImage);
         tvDuration = findViewById(R.id.tvDuration);
@@ -180,6 +186,28 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         position = songExtraData.getInt("position", 0);
 
         initializeMusicPlayer(position);
+        btnShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isShuffleOn = !isShuffleOn;
+                if (isShuffleOn) {
+                    btnShuffle.setBackgroundColor(Color.parseColor("#800080")); // Màu tím
+                } else {
+                    btnShuffle.setBackgroundColor(Color.parseColor("#000000")); // Màu đen
+                }
+            }
+        });
+        btnLoop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isLoopOn = !isLoopOn;
+                if (isLoopOn) {
+                    btnLoop.setBackgroundColor(Color.parseColor("#800080")); // Màu tím
+                } else {
+                    btnLoop.setBackgroundColor(Color.parseColor("#000000")); // Màu đen
+                }
+            }
+        });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -343,8 +371,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             }
         });
 
-        // setting the oncompletion listener
-        // after song finishes what should happen // for now we will just set the pause button to play
 
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -380,15 +406,22 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                btnPlay.setBackgroundResource(R.drawable.ic_play);
-
-                int currentPosition = position;
-                if (currentPosition < musicList.size() -1) {
-                    currentPosition++;
-                } else {
-                    currentPosition = 0;
+                if(isLoopOn)
+                {
+                    btnPlay.setBackgroundResource(R.drawable.ic_play);
+                    initializeMusicPlayer(position);
                 }
-                initializeMusicPlayer(currentPosition);
+                else {
+                    btnPlay.setBackgroundResource(R.drawable.ic_play);
+
+                    int currentPosition = position;
+                    if (currentPosition < musicList.size() -1) {
+                        currentPosition++;
+                    } else {
+                        currentPosition = 0;
+                    }
+                    initializeMusicPlayer(currentPosition);
+                }
 
             }
         });
@@ -516,12 +549,26 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
     @Override
     public void nextClicked() {
-        if(position<musicList.size()-1)
-        {
-            position++;
+        if(isShuffleOn) {
+            Random rand = new Random();
+            int newPosition = rand.nextInt(musicList.size());
+            while(playedSongs.contains(newPosition)) {
+                newPosition = rand.nextInt(musicList.size());
+            }
+            position = newPosition;
+            playedSongs.add(newPosition);
+            if(playedSongs.size() == musicList.size()) {
+                playedSongs.clear();
+            }
         }
         else {
-            position=0;
+            if(position<musicList.size()-1)
+            {
+                position++;
+            }
+            else {
+                position=0;
+            }
         }
         initializeMusicPlayer(position);
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
@@ -533,12 +580,12 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
     @Override
     public void prevClicked() {
-        if(position<=0){
-            position=musicList.size()-1;
-        }
-        else {
-            position--;
-        }
+            if(position<=0){
+                position=musicList.size()-1;
+            }
+            else {
+                position--;
+            }
         initializeMusicPlayer(position);
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             showNotification(R.drawable.ic_play,0F);
