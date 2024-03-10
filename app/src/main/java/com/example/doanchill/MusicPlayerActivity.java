@@ -101,11 +101,11 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;
     int position,currentPos;
-    ImageView nextBtn, previousBtn,back;
+    ImageView nextBtn, previousBtn,back, btnShuffle,btnLoop;
     CircleImageView tvImage;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
-    Button btnPlay,btnShuffle,btnLoop;
+    Button btnPlay;
     String key;
     ImageButton dotbutton;
     static MediaPlayer mMediaPlayer;
@@ -150,7 +150,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
 
         song = (Song) getIntent().getSerializableExtra("song");
-        btnShuffle=findViewById(R.id.shuffleBtn);
+        btnShuffle = findViewById(R.id.shuffleBtn);
         btnLoop=findViewById(R.id.LoopBtn);
         tvTime = findViewById(R.id.tvTime);
         tvImage=findViewById(R.id.tvImage);
@@ -193,9 +193,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             public void onClick(View v) {
                 isShuffleOn = !isShuffleOn;
                 if (isShuffleOn) {
-                    btnShuffle.setBackgroundColor(Color.parseColor("#800080")); // Màu tím
+                    btnShuffle.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
                 } else {
-                    btnShuffle.setBackgroundColor(Color.parseColor("#000000")); // Màu đen
+                    btnShuffle.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
                 }
             }
         });
@@ -204,9 +204,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             public void onClick(View v) {
                 isLoopOn = !isLoopOn;
                 if (isLoopOn) {
-                    btnLoop.setBackgroundColor(Color.parseColor("#800080")); // Màu tím
+                    btnLoop.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
                 } else {
-                    btnLoop.setBackgroundColor(Color.parseColor("#000000")); // Màu đen
+                    btnLoop.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
                 }
             }
         });
