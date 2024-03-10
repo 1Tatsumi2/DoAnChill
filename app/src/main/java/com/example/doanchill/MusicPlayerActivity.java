@@ -380,6 +380,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), dotbutton);
+                MenuInflater inflater = popupMenu.getMenuInflater();
+                inflater.inflate(R.menu.dot_menu_button, popupMenu.getMenu());
+                popupMenu.show();
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {

@@ -30,11 +30,13 @@
             android:layout_height="48dp"
             android:layout_marginStart="330dp"
             android:background="#00FAFAFA"
+            app:menu="@menu/dot_menu_button"
             app:tint="#F4F4F4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.983"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/dotbutton" />
+            app:srcCompat="@drawable/dotbutton"
+            android:contentDescription="TODO" />
 
     </RelativeLayout>
 
