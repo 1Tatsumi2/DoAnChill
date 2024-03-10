@@ -118,7 +118,7 @@
                         android:drawableStart="@drawable/ic_4"
                         android:drawablePadding="20dp"
                         android:paddingStart="20dp"
-                        android:text="Library (In Development)"
+                        android:text="My Library"
                         android:textAlignment="viewStart" />
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/LogoutUser"

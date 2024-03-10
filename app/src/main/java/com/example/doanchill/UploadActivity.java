@@ -66,7 +66,6 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-        uploadAlbum=findViewById(R.id.uploadAlbum);
         uploadArtist=findViewById(R.id.uploadArtist);
         uploadName=findViewById(R.id.uploadName);
         uploadSinger=findViewById(R.id.uploadSinger);
@@ -209,7 +208,7 @@ public class UploadActivity extends AppCompatActivity {
     private void UploadData() {
         String name=uploadName.getText().toString();
         String artist=uploadArtist.getText().toString();
-        String album=uploadAlbum.getText().toString();
+        String album="";
         String singer=uploadSinger.getText().toString();
         int duration=0;
         mediaPlayer= MediaPlayer.create(UploadActivity.this,uriAu);

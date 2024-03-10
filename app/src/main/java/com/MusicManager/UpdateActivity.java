@@ -75,7 +75,6 @@ public class UpdateActivity extends AppCompatActivity {
         name=findViewById(R.id.updateName);
         artist=findViewById(R.id.updateArtist);
         singer=findViewById(R.id.updateSinger);
-        album=findViewById(R.id.updateAlbum);
         activityResultLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -148,7 +147,6 @@ public class UpdateActivity extends AppCompatActivity {
             name.setText(bundle.getString("Title"));
             artist.setText(bundle.getString("Artist"));
             singer.setText(bundle.getString("Singer"));
-            album.setText(bundle.getString("Album"));
             key=bundle.getString("Key");
             oldImageUrl=bundle.getString("Image");
             oldAudioUrl=bundle.getString("Audio");
@@ -285,7 +283,7 @@ public class UpdateActivity extends AppCompatActivity {
     private void UpdateData() {
         String nameUpdate=name.getText().toString();
         String artistUpdate=artist.getText().toString();
-        String albumUpdate=album.getText().toString();
+        String albumUpdate="";
         String singerUpdate=singer.getText().toString();
         if(isAudioUpdated)
         {
