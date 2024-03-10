@@ -90,17 +90,6 @@
                     android:textColor="@color/lavender"
                     android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/updateAlbum"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/lavender_border"
-                    android:gravity="start|center_vertical"
-                    android:hint="Enter album (optional)"
-                    android:padding="16dp"
-                    android:textColor="@color/lavender"
-                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/saveUpdateButton"

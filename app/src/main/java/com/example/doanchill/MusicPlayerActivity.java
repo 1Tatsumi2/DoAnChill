@@ -246,12 +246,12 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
                         if(item.getItemId()==R.id.add_to_playlist)
                         {
                             Intent i=new Intent(MusicPlayerActivity.this, AddPlaylistToMusicActivity.class);
-                            i.putExtra("key",key);
+                            i.putExtra("key",musicList.get(position).getKey());
                             startActivity(i);
                             finish();
                         } else if (item.getItemId()==R.id.add_to_library) {
                             //pending
-                            DocumentReference musicRef=db.collection("Music").document(song.getKey());
+                            DocumentReference musicRef=db.collection("Music").document(musicList.get(position).getKey());
                             DocumentReference refLib=db.collection("library").document(UserID);
                             refLib.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override

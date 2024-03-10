@@ -83,6 +83,7 @@ public class AddPlaylistActivity extends AppCompatActivity {
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
         fStore=FirebaseFirestore.getInstance();
+        publicSwitch.setVisibility(View.GONE);
         refUser.document(UserID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

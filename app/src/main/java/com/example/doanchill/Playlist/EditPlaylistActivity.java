@@ -94,6 +94,7 @@ public class EditPlaylistActivity extends AppCompatActivity {
         desc.setText(description);
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
+        publicSwitch.setVisibility(View.GONE);
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
