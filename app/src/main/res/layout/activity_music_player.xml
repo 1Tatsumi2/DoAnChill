@@ -30,11 +30,13 @@
             android:layout_height="48dp"
             android:layout_marginStart="330dp"
             android:background="#00FAFAFA"
+            app:menu="@menu/dot_menu_button"
             app:tint="#F4F4F4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.983"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/dotbutton" />
+            app:srcCompat="@drawable/dotbutton"
+            android:contentDescription="TODO" />
 
     </RelativeLayout>
 
@@ -79,10 +81,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="16dp"
-        android:text="Unknown"
+        android:hint="Unknown"
         android:textAllCaps="true"
         android:textColor="#fff"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.539"
@@ -90,27 +92,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/shuffleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Shuffle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.012"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/LoopBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Loop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -152,13 +134,13 @@
         android:layout_height="wrap_content"
         android:padding="20dp">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_skip_previous_24"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/previous"/>
+        <ImageView
+            android:id="@+id/previous"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_toEndOf="@+id/shuffleBtn"
+            android:src="@drawable/ic_baseline_skip_previous_24" />
 
         <Button
             android:id="@+id/btnPlay"
@@ -167,13 +149,36 @@
             android:layout_centerInParent="true"
             android:background="@drawable/ic_play"
             android:contentDescription="Play/Pause Button" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_skip_next_24"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/next"/>
+
+        <ImageView
+            android:id="@+id/next"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@+id/LoopBtn"
+            android:src="@drawable/ic_baseline_skip_next_24" />
+
+        <ImageView
+            android:id="@+id/shuffleBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/baseline_shuffle_24"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/LoopBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/baseline_loop_24"
+            app:tint="@color/white" />
 
     </RelativeLayout>
 
