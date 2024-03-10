@@ -42,9 +42,17 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
         convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist,null);
         TextView playlistTitle=convertView.findViewById(R.id.namePlaylist);
         TextView playlistAuthor=convertView.findViewById(R.id.authorPlaylist);
+        TextView playlistNumSong=convertView.findViewById(R.id.songPlaylist);
         ImageView image=convertView.findViewById(R.id.imagePlaylist);
         Playlist playlist=getItem(position);
+
+        Integer a=playlist.getSongNumber();
+        String b=a.toString();
+
         playlistTitle.setText(playlist.getName());
+        playlistNumSong.setText(b);
+
+
         playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
