@@ -40,6 +40,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CaNhanFragment extends Fragment {
 
@@ -49,8 +50,10 @@ public class CaNhanFragment extends Fragment {
 
     SongsAdapter songsAdapter;
     String receivedString;
+    Boolean isSth;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Music");
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ca_nhan, container, false);
@@ -65,6 +68,11 @@ public class CaNhanFragment extends Fragment {
         Bundle arguments = getArguments();
         if (arguments != null) {
             receivedString = arguments.getString("search");
+            isSth=arguments.getBoolean("isSth");
+        }
+        if (isSth==null)
+        {
+            isSth=false;
         }
         showAllSongs();
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -77,13 +85,17 @@ public class CaNhanFragment extends Fragment {
                     songArrayList.add(song);
                 }
                 songsAdapter.notifyDataSetChanged();
+                if(isSth)
+                {
+                    searchView.setQuery(receivedString, false);
+                    searchList(receivedString);
+                    isSth=false;
+                }
+                else {
+                    showAllSongs();
+                }
             }
         });
-        searchView.setQuery(receivedString, true);
-        if(receivedString!=null)
-        {
-            searchView.setQuery(receivedString, true);
-        }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

@@ -35,12 +35,14 @@ import com.example.doanchill.Adapters.PlaylistMainAdapter;
 import com.example.doanchill.Adapters.SliderAdapter;
 import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
+import com.example.doanchill.MainActivity;
 import com.example.doanchill.Models.SliderModel;
 import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.Utils.SliderTimer;
 import com.example.doanchill.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -58,7 +60,7 @@ import java.util.Timer;
 
 
 public class TrangChuFragment extends Fragment {
-;;
+
     private ViewPager slider;
     RecyclerView Playlists,Top100,TopSinger,MyPlaylist,Explore;
     PlaylistMainAdapter playlistMainAdapter,playlistTop100Adapter,getPlaylistTopSingerAdapter,myPlaylistAdapter;
@@ -76,7 +78,7 @@ public class TrangChuFragment extends Fragment {
     private Timer timer;
     ConstraintLayout layout;
     TextView story;
-    ImageView imageStory, MicroIcon;
+    ImageView imageStory, MicroIcon,buttonSearch;
     String keyStory, imagestoryl;
 
 
@@ -89,6 +91,7 @@ public class TrangChuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trang_chu, container, false);
+        buttonSearch=view.findViewById(R.id.buttonSearch);
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
         DocumentReference UserRef=refUser.document(UserID);
@@ -166,8 +169,11 @@ public class TrangChuFragment extends Fragment {
                                 String recognizedText = results.get(0);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("search", recognizedText);
+                                bundle.putBoolean("isSth",true);
                                 CaNhanFragment caNhanFragment=new CaNhanFragment();
                                 caNhanFragment.setArguments(bundle);
+                                MainActivity mainActivity = (MainActivity) getActivity();
+                                mainActivity.getBottomNavigationView().setSelectedItemId(R.id.profile);
                                 // Xử lý văn bản đã nhận dạng ở đây
                                 replaceFragment(caNhanFragment);
                             }
@@ -186,6 +192,14 @@ public class TrangChuFragment extends Fragment {
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói gì đó...");
                 someActivityResultLauncher.launch(intent);
+            }
+        });
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.getBottomNavigationView().setSelectedItemId(R.id.profile);
+                replaceFragment(new CaNhanFragment());
             }
         });
 

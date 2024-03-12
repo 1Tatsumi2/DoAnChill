@@ -93,7 +93,7 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                         }
                     });
                 }
-                else {
+                else  {
                     ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -105,7 +105,7 @@ public class PlaylistManagerActivity extends AppCompatActivity {
                                 playlist.getAuthor().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if((!Objects.equals(documentSnapshot.getString("role"), "User"))&&(!Objects.equals(classified, "My Playlist")))
+                                        if((!Objects.equals(classified, "My Playlist")))
                                         {
                                             playlistArrayList.add(playlist);
                                             playlistAdapter.notifyDataSetChanged();

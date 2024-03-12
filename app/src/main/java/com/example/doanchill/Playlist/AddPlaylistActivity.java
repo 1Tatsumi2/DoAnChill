@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,6 +50,7 @@ import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -256,17 +258,40 @@ public class AddPlaylistActivity extends AppCompatActivity {
     private void UploadData() {
         String names=name.getText().toString();
         String descs=desc.getText().toString();
-        DocumentReference documentReference=fStore.collection("users").document(UserID);
-        Playlist playlist=new Playlist(names,descs,publicSwitch.isChecked(),documentReference,imageUrl,classified);
-        ref.add(playlist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        DocumentReference userRef=fStore.collection("users").document(UserID);
+        DocumentReference adminRef=fStore.collection("users").document("LsiJR6KrpzbhKCj5xuw1d6GgLs43");
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(AddPlaylistActivity.this,"Playlist Created",Toast.LENGTH_SHORT).show();
-                Intent i=new Intent(AddPlaylistActivity.this, PlaylistDetailActivity.class);
-                playlist.setKey(documentReference.getId());
-                i.putExtra("key",playlist.getKey());
-                startActivity(i);
-                finish();
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(!Objects.equals(documentSnapshot.getString("role"), "User"))
+                {
+                    Playlist playlist=new Playlist(names,descs,false,adminRef,imageUrl,classified);
+                    ref.add(playlist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(AddPlaylistActivity.this,"Playlist Created",Toast.LENGTH_SHORT).show();
+                            Intent i=new Intent(AddPlaylistActivity.this, PlaylistDetailActivity.class);
+                            playlist.setKey(documentReference.getId());
+                            i.putExtra("key",playlist.getKey());
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                }
+                else {
+                    Playlist playlist=new Playlist(names,descs,false,userRef,imageUrl,classified);
+                    ref.add(playlist).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(AddPlaylistActivity.this,"Playlist Created",Toast.LENGTH_SHORT).show();
+                            Intent i=new Intent(AddPlaylistActivity.this, PlaylistDetailActivity.class);
+                            playlist.setKey(documentReference.getId());
+                            i.putExtra("key",playlist.getKey());
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                }
             }
         });
     }
