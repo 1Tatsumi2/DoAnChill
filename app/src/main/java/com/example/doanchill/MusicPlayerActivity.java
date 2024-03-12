@@ -129,17 +129,26 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        UserID=firebaseAuth.getCurrentUser().getUid();
+        DocumentReference userReff=db.collection("users").document(UserID);
+        userReff.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+             if(!documentSnapshot.getBoolean("premium"))
+             {
+                 MobileAds.initialize(MusicPlayerActivity.this, new OnInitializationCompleteListener() {
+                     @Override
+                     public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
 
+                     }
+                 });
+                 mAdView = findViewById(R.id.adbanner);
+                 AdRequest adRequest = new AdRequest.Builder().build();
+                 mAdView.loadAd(adRequest);
+             }
             }
         });
-
-        mAdView = findViewById(R.id.adbanner);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
 
         ActionBar actionBar = getSupportActionBar();

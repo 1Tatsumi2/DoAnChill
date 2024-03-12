@@ -21,25 +21,7 @@
             android:padding="5dp"
             android:src="@drawable/ic_arrow" />
 
-        <ImageView
-            android:id="@+id/downloadbutton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="280dp"
-            android:layout_toEndOf="@id/btnBack1"
-            android:src="@drawable/download"
-            app:tint="@color/white" />
 
-        <ImageView
-            android:id="@+id/button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/downloadbutton"
-            android:src="@drawable/baseline_search_24"
-            app:tint="@color/white">
-
-        </ImageView>
 
 
     </RelativeLayout>
@@ -54,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Thư Viện Của Bạn"
+            android:text="My library"
             android:textColor="#fff"
             android:textSize="22sp" />
 
@@ -81,7 +63,7 @@
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/soBaiHatTrongThuVien"
             android:gravity="center"
-            android:text="bài hát ~ Đã lưu vào thư viện"
+            android:text="songs ~ Saved to library"
             android:textColor="#A8A3A3"
             android:textSize="18sp" />
 
@@ -97,7 +79,7 @@
             android:id="@+id/phatNgauNhienLibrary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PHÁT NGẪU NHIÊN" />
+            android:text="Shuffle" />
 
     </RelativeLayout>
 

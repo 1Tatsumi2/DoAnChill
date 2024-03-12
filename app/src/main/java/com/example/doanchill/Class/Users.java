@@ -8,6 +8,7 @@ public class Users implements Serializable {
     private String image;
     private String role;
     private String key;
+    private Boolean premium;
 
     public String getKey() {
         return key;
@@ -17,11 +18,12 @@ public class Users implements Serializable {
         this.key = key;
     }
 
-    public Users(String fName, String email, String image, String role) {
+    public Users(String fName, String email, String image, String role,Boolean premium) {
         this.fName = fName;
         this.email = email;
         this.image = image;
         this.role = role;
+        this.premium=premium;
     }
 
     public Users() {
@@ -57,5 +59,13 @@ public class Users implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Boolean getPremium() {
+        return premium;
+    }
+
+    public void setPremium(Boolean premium) {
+        this.premium = premium;
     }
 }
