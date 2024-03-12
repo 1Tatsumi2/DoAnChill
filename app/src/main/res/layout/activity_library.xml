@@ -1,28 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-    tools:context=".Library.LibraryActivity"
-android:background="@drawable/backgroundtrangchu">
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical"
     android:background="@drawable/backgroundtrangchu"
-    tools:context=".ListMusicActivity">
+    android:orientation="vertical"
+    tools:context=".Library.LibraryActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:id="@+id/btnBack1"
+            android:padding="5dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <ImageView
+            android:id="@+id/downloadbutton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="280dp"
+            android:layout_toEndOf="@id/btnBack1"
+            app:tint="@color/white"
+            android:src="@drawable/download" />
+
+        <ImageView
+            android:id="@+id/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_search_24"
+            android:layout_toEndOf="@+id/downloadbutton"
+            android:layout_marginStart="10dp"
+            app:tint="@color/white">
+
+        </ImageView>
 
 
+    </RelativeLayout>
 
-    <ListView
-        android:id="@+id/lvLibrary"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thư Viện Của Bạn"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="22sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/soBaiHatTrongThuVien"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+
+            android:textColor="#A8A3A3"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/soBaiHatTrongThuVien"
+            android:text="bài hát ~ Đã lưu vào thư viện"
+            android:gravity="center"
+            android:layout_marginStart="5dp"
+            android:textColor="#A8A3A3"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="25dp">
+
+        <Button
+            android:id="@+id/phatNgauNhienLibrary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PHÁT NGẪU NHIÊN"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="25dp">
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/backgroundtrangchu"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".ListMusicActivity">
+
+
+        <ListView
+            android:id="@+id/lvLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
