@@ -48,6 +48,7 @@ public class CaNhanFragment extends Fragment {
     SearchView searchView;
 
     SongsAdapter songsAdapter;
+    String receivedString;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("Music");
     @Override
@@ -61,6 +62,10 @@ public class CaNhanFragment extends Fragment {
 
         songsAdapter = new SongsAdapter(getActivity(), songArrayList);
         lvSongs.setAdapter(songsAdapter);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            receivedString = arguments.getString("search");
+        }
         showAllSongs();
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -74,12 +79,17 @@ public class CaNhanFragment extends Fragment {
                 songsAdapter.notifyDataSetChanged();
             }
         });
-
+        searchView.setQuery(receivedString, true);
+        if(receivedString!=null)
+        {
+            searchView.setQuery(receivedString, true);
+        }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
