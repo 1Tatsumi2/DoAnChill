@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.CaNhanFragment"
-    android:background="@drawable/backgroundtrangchu">
+    android:background="@drawable/backgroundtrangchu"
+    android:id="@+id/anBaToCom">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -28,7 +29,8 @@
             app:queryHint="Search by song, singer and artist"
             android:focusable="false"
             android:background="@drawable/lavender_border"
-            app:searchIcon="@drawable/baseline_manage_search_24"/>
+            app:searchIcon="@drawable/baseline_search_24"
+            android:backgroundTint="@color/white"/>
 
         <ListView
             android:id="@+id/lvSongs"
