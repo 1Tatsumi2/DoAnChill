@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class UserDetailActivity extends AppCompatActivity {
 
-    Button changeRole;
+    Button changeRole,changePremium;
     TextView detailName, detailEmail, detailRole;
     ImageView detailImage;
     FirebaseFirestore fStore;
@@ -43,6 +43,7 @@ public class UserDetailActivity extends AppCompatActivity {
         detailRole=findViewById(R.id.detailRole);
         detailImage=findViewById(R.id.detailUserImage);
         changeRole=findViewById(R.id.changeRole);
+        changePremium=findViewById(R.id.changePremium);
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
         Intent intent=getIntent();
@@ -56,6 +57,7 @@ public class UserDetailActivity extends AppCompatActivity {
         if(Objects.equals(users1.getRole(), "Admin"))
         {
             changeRole.setVisibility(View.GONE);
+            changePremium.setVisibility(View.GONE);
         }
         changeRole.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +69,7 @@ public class UserDetailActivity extends AppCompatActivity {
                     edited.put("email",users1.getEmail());
                     edited.put("fName",users1.getfName());
                     edited.put("image",users1.getImage());
+                    edited.put("premium",users1.getPremium());
                     edited.put("role","User");
                     documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -83,11 +86,52 @@ public class UserDetailActivity extends AppCompatActivity {
                     edited.put("email",users1.getEmail());
                     edited.put("fName",users1.getfName());
                     edited.put("image",users1.getImage());
+                    edited.put("premium",true);
                     edited.put("role","Moderator");
                     documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(UserDetailActivity.this, "Set Moderator", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(UserDetailActivity.this, ManageUserActivity.class));
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
+        changePremium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(users1.getPremium())
+                {
+                    DocumentReference documentReference=fStore.collection("users").document(key);
+                    Map<String,Object> edited=new HashMap<>();
+                    edited.put("email",users1.getEmail());
+                    edited.put("fName",users1.getfName());
+                    edited.put("image",users1.getImage());
+                    edited.put("premium",false);
+                    edited.put("role",users1.getRole());
+                    documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(UserDetailActivity.this, "Delete Premium", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(UserDetailActivity.this, ManageUserActivity.class));
+                            finish();
+                        }
+                    });
+                }
+                else {
+                    DocumentReference documentReference=fStore.collection("users").document(key);
+                    Map<String,Object> edited=new HashMap<>();
+                    edited.put("email",users1.getEmail());
+                    edited.put("fName",users1.getfName());
+                    edited.put("image",users1.getImage());
+                    edited.put("premium",true);
+                    edited.put("role",users1.getRole());
+                    documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(UserDetailActivity.this, "SetPremium", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(UserDetailActivity.this, ManageUserActivity.class));
                             finish();
                         }
