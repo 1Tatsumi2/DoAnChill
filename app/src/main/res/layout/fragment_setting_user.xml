@@ -104,7 +104,7 @@
 
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/NotificationUser"
+                        android:id="@+id/LibraryUser"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginStart="32dp"
@@ -118,7 +118,7 @@
                         android:drawableStart="@drawable/ic_4"
                         android:drawablePadding="20dp"
                         android:paddingStart="20dp"
-                        android:text="Library (In Development)"
+                        android:text="My Library"
                         android:textAlignment="viewStart" />
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/LogoutUser"

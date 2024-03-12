@@ -94,6 +94,7 @@ public class EditPlaylistActivity extends AppCompatActivity {
         desc.setText(description);
         fAuth=FirebaseAuth.getInstance();
         UserID=fAuth.getCurrentUser().getUid();
+        publicSwitch.setVisibility(View.GONE);
         updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,63 +108,70 @@ public class EditPlaylistActivity extends AppCompatActivity {
                 String role=documentSnapshot.getString("role");
                 if(!role.equals("User"))
                 {
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            String item=parent.getItemAtPosition(position).toString();
-                            classified=item;
-                        }
+                    if(Objects.equals(classified, "Artist Story"))
+                    {
+                        spinner.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String item=parent.getItemAtPosition(position).toString();
+                                classified=item;
+                            }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-                            String defaultItem = "My Playlist";
-                            classified=defaultItem;
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                String defaultItem = "My Playlist";
+                                classified=defaultItem;
+                            }
+                        });
+                        ArrayList<String> arrayList=new ArrayList<>();
+                        if(Objects.equals(classified, "Playlist"))
+                        {
+                            arrayList.add("Playlist");
+                            arrayList.add("Explore");
+                            arrayList.add("Top 100");
+                            arrayList.add("Top Singer");
+                            arrayList.add("My Playlist");
                         }
-                    });
-                    ArrayList<String> arrayList=new ArrayList<>();
-                    if(Objects.equals(classified, "Playlist"))
-                    {
-                        arrayList.add("Playlist");
-                        arrayList.add("Explore");
-                        arrayList.add("Top 100");
-                        arrayList.add("Top Singer");
-                        arrayList.add("My Playlist");
+                        else if(Objects.equals(classified, "Top 100"))
+                        {
+                            arrayList.add("Top 100");
+                            arrayList.add("Explore");
+                            arrayList.add("Playlist");
+                            arrayList.add("Top Singer");
+                            arrayList.add("My Playlist");
+                        }
+                        else if(Objects.equals(classified, "Top Singer"))
+                        {
+                            arrayList.add("Top Singer");
+                            arrayList.add("Explore");
+                            arrayList.add("Top 100");
+                            arrayList.add("Playlist");
+                            arrayList.add("My Playlist");
+                        }
+                        else if(Objects.equals(classified, "My Playlist"))
+                        {
+                            arrayList.add("My Playlist");
+                            arrayList.add("Explore");
+                            arrayList.add("Top Singer");
+                            arrayList.add("Top 100");
+                            arrayList.add("Playlist");
+                        }
+                        else if(Objects.equals(classified, "Explore"))
+                        {
+                            arrayList.add("Explore");
+                            arrayList.add("My Playlist");
+                            arrayList.add("Top Singer");
+                            arrayList.add("Top 100");
+                            arrayList.add("Playlist");
+                        }
+                        ArrayAdapter<String> adapter=new ArrayAdapter<>(EditPlaylistActivity.this, android.R.layout.simple_spinner_item,arrayList);
+                        adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+                        spinner.setAdapter(adapter);
                     }
-                    else if(Objects.equals(classified, "Top 100"))
-                    {
-                        arrayList.add("Top 100");
-                        arrayList.add("Explore");
-                        arrayList.add("Playlist");
-                        arrayList.add("Top Singer");
-                        arrayList.add("My Playlist");
-                    }
-                    else if(Objects.equals(classified, "Top Singer"))
-                    {
-                        arrayList.add("Top Singer");
-                        arrayList.add("Explore");
-                        arrayList.add("Top 100");
-                        arrayList.add("Playlist");
-                        arrayList.add("My Playlist");
-                    }
-                    else if(Objects.equals(classified, "My Playlist"))
-                    {
-                        arrayList.add("My Playlist");
-                        arrayList.add("Explore");
-                        arrayList.add("Top Singer");
-                        arrayList.add("Top 100");
-                        arrayList.add("Playlist");
-                    }
-                    else if(Objects.equals(classified, "Explore"))
-                    {
-                        arrayList.add("Explore");
-                        arrayList.add("My Playlist");
-                        arrayList.add("Top Singer");
-                        arrayList.add("Top 100");
-                        arrayList.add("Playlist");
-                    }
-                    ArrayAdapter<String> adapter=new ArrayAdapter<>(EditPlaylistActivity.this, android.R.layout.simple_spinner_item,arrayList);
-                    adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
-                    spinner.setAdapter(adapter);
                 }
                 else {
                     classified="My Playlist";

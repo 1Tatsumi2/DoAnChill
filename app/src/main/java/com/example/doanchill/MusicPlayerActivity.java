@@ -52,6 +52,8 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.os.Handler;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -66,18 +68,28 @@ import com.example.doanchill.Class.Song;
 import com.example.doanchill.Interface.ActionPlaying;
 import com.example.doanchill.Interface.MusicService;
 import com.example.doanchill.Interface.NotificationReceiver;
+import com.example.doanchill.Playlist.AddMusicToPlayListActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -88,8 +100,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     Bundle songExtraData;
     TextView tvTime, tvTitle, tvArtist;
     TextView tvDuration;
-    int position;
-    ImageView nextBtn, previousBtn,back;
+    int position,currentPos;
+    ImageView nextBtn, previousBtn,back, btnShuffle,btnLoop;
     CircleImageView tvImage;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
@@ -104,7 +116,14 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     AdView mAdView;
     ObjectAnimator objectAnimator;
     LinearLayout layout;
-    String currentImageUri;
+    String currentImageUri,UserID;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    FirebaseAuth fAuth=FirebaseAuth.getInstance();
+
+    Song song;
+    private boolean isShuffleOn = false;
+    private boolean isLoopOn = false;
+    private ArrayList<Integer> playedSongs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +149,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
 
 
-        Song song = (Song) getIntent().getSerializableExtra("song");
+        song = (Song) getIntent().getSerializableExtra("song");
+        btnShuffle = findViewById(R.id.shuffleBtn);
+        btnLoop=findViewById(R.id.LoopBtn);
         tvTime = findViewById(R.id.tvTime);
         tvImage=findViewById(R.id.tvImage);
         tvDuration = findViewById(R.id.tvDuration);
@@ -150,6 +171,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         objectAnimator.setRepeatMode(ValueAnimator.RESTART);
         objectAnimator.setInterpolator(new LinearInterpolator());
         objectAnimator.start();
+        UserID=fAuth.getCurrentUser().getUid();
         layout = findViewById(R.id.layout);
 
 
@@ -164,8 +186,30 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         key=songExtraData.getString("key");
         musicList = (ArrayList)songExtraData.getParcelableArrayList("musics");
         position = songExtraData.getInt("position", 0);
-
+        currentPos=position;
         initializeMusicPlayer(position);
+        btnShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isShuffleOn = !isShuffleOn;
+                if (isShuffleOn) {
+                    btnShuffle.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
+                } else {
+                    btnShuffle.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
+                }
+            }
+        });
+        btnLoop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isLoopOn = !isLoopOn;
+                if (isLoopOn) {
+                    btnLoop.setColorFilter(Color.parseColor("#4B1F9A")); // Màu tím
+                } else {
+                    btnLoop.setColorFilter(Color.parseColor("#FFFFFFFF")); // Màu trắng
+                }
+            }
+        });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,30 +235,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
                 finish();
             }
         });
-        dotbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), dotbutton);
-                popupMenu.getMenuInflater().inflate(R.menu.dot_menu_button, popupMenu.getMenu());
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        // Handle menu item click here
-                        if(item.getItemId()==R.id.add_to_playlist)
-                        {
-                            Intent i=new Intent(MusicPlayerActivity.this, AddPlaylistToMusicActivity.class);
-                            i.putExtra("key",key);
-                            startActivity(i);
-                            finish();
-                        }
-                        return true;
-                    }
-                });
-
-                popupMenu.show();
-            }
-        });
     }//end main
 
 
@@ -228,14 +249,13 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         finish();
     }
 
-
     private void initializeMusicPlayer(int position) {
         // if mediaplayer is not null and playing reset it at the launch of activity
 
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
         }
-
+        currentPos=position;
         // getting out the song name
         String name = musicList.get(position).getTitle();
         tvTitle.setText(name);
@@ -288,8 +308,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
             }
         });
 
-        // setting the oncompletion listener
-        // after song finishes what should happen // for now we will just set the pause button to play
 
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -325,21 +343,106 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                btnPlay.setBackgroundResource(R.drawable.ic_play);
-
-                int currentPosition = position;
-                if (currentPosition < musicList.size() -1) {
-                    currentPosition++;
-                } else {
-                    currentPosition = 0;
+                if(isLoopOn && isShuffleOn)
+                {
+                    btnPlay.setBackgroundResource(R.drawable.ic_play);
+                    initializeMusicPlayer(position);
                 }
-                initializeMusicPlayer(currentPosition);
+                else if(isLoopOn)
+                {
+                    btnPlay.setBackgroundResource(R.drawable.ic_play);
+                    initializeMusicPlayer(position);
+                }
+                else if(isShuffleOn) {
+                    Random rand = new Random();
+                    int newPosition = rand.nextInt(musicList.size());
+                    currentPos=newPosition;
+                    initializeMusicPlayer(newPosition);
+                }
+                else {
+                    btnPlay.setBackgroundResource(R.drawable.ic_play);
+                    int currentPosition = position;
+                    if (currentPosition < musicList.size() -1) {
+                        currentPosition++;
+                    } else {
+                        currentPosition = 0;
+                    }
+                    currentPos=currentPosition;
+                    initializeMusicPlayer(currentPosition);
+                }
 
             }
         });
 
 
         // working on seekbar
+        dotbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), dotbutton);
+                MenuInflater inflater = popupMenu.getMenuInflater();
+                inflater.inflate(R.menu.dot_menu_button, popupMenu.getMenu());
+                popupMenu.show();
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Handle menu item click here
+                        if(item.getItemId()==R.id.add_to_playlist)
+                        {
+                            Intent i=new Intent(MusicPlayerActivity.this, AddPlaylistToMusicActivity.class);
+                            i.putExtra("key",musicList.get(currentPos).getKey());
+                            startActivity(i);
+                            finish();
+                        } else if (item.getItemId()==R.id.add_to_library) {
+                            //pending
+                            DocumentReference musicRef=db.collection("Music").document(musicList.get(currentPos).getKey());
+                            DocumentReference refLib=db.collection("library").document(UserID);
+                            refLib.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> library = (Map<String, Object>) documentSnapshot.get("songs");
+                                    String uniqueKey=musicList.get(currentPos).getKey();
+                                    if (library != null && library.containsKey(uniqueKey)) {
+                                        // Nếu trường tồn tại, xóa nó
+                                        Map<String, Object> updates = new HashMap<>();
+                                        Double k=documentSnapshot.getDouble("songNumber");
+                                        Integer ik=k.intValue();
+                                        Integer updatedNumber=ik-1;
+                                        updates.put("songNumber",updatedNumber);
+                                        updates.put("songs." + uniqueKey, FieldValue.delete());
+
+                                        refLib.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(MusicPlayerActivity.this,"song removed from your library",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        // Nếu trường không tồn tại, thêm nó
+                                        Map<String, Object> updates = new HashMap<>();
+                                        Double k=documentSnapshot.getDouble("songNumber");
+                                        Integer ik=k.intValue();
+                                        Integer updatedNumber=ik+1;
+                                        updates.put("songNumber",updatedNumber);
+                                        updates.put("songs." + uniqueKey, musicRef);
+
+                                        refLib.update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(MusicPlayerActivity.this, "Added to library", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                });
+
+                popupMenu.show();
+            }
+        });
 
         // thanh thoi gian bai hat
         seekBarTime.setMax(mMediaPlayer.getDuration());
@@ -461,13 +564,27 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
     @Override
     public void nextClicked() {
-        if(position<musicList.size()-1)
-        {
-            position++;
+        if(isShuffleOn) {
+            Random rand = new Random();
+            position = rand.nextInt(musicList.size());
+            while(playedSongs.contains(position)) {
+                position = rand.nextInt(musicList.size());
+            }
+            playedSongs.add(position);
+            if(playedSongs.size() == musicList.size()) {
+                playedSongs.clear();
+            }
         }
         else {
-            position=0;
+            if(position<musicList.size()-1)
+            {
+                position++;
+            }
+            else {
+                position=0;
+            }
         }
+        currentPos=position;
         initializeMusicPlayer(position);
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             showNotification(R.drawable.ic_play,0F);
@@ -478,12 +595,12 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
 
     @Override
     public void prevClicked() {
-        if(position<=0){
-            position=musicList.size()-1;
-        }
-        else {
-            position--;
-        }
+            if(position<=0){
+                position=musicList.size()-1;
+            }
+            else {
+                position--;
+            }
         initializeMusicPlayer(position);
         if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
             showNotification(R.drawable.ic_play,0F);
