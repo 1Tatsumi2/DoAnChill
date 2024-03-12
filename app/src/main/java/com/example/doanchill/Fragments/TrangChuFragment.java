@@ -1,15 +1,23 @@
 package com.example.doanchill.Fragments;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +25,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.MusicManager.MusicManagerActivity;
 import com.MusicManager.PlaylistDetailActivity;
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Adapters.ExploreAdapter;
@@ -26,6 +36,7 @@ import com.example.doanchill.Adapters.SliderAdapter;
 import com.example.doanchill.Class.Playlist;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Models.SliderModel;
+import com.example.doanchill.MusicPlayerActivity;
 import com.example.doanchill.R;
 import com.example.doanchill.Utils.SliderTimer;
 import com.example.doanchill.databinding.ActivityMainBinding;
@@ -41,6 +52,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
 
@@ -64,7 +76,7 @@ public class TrangChuFragment extends Fragment {
     private Timer timer;
     ConstraintLayout layout;
     TextView story;
-    ImageView imageStory;
+    ImageView imageStory, MicroIcon;
     String keyStory, imagestoryl;
 
 
@@ -90,6 +102,7 @@ public class TrangChuFragment extends Fragment {
         layout=view.findViewById(R.id.story);
         story=view.findViewById(R.id.artistStory);
         imageStory=view.findViewById(R.id.imageStory);
+        MicroIcon = view.findViewById(R.id.microIcon);
         DocumentReference docRef=ref.document("jXSAzW14cqjibGREeCjw");
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -139,6 +152,42 @@ public class TrangChuFragment extends Fragment {
         MyPlaylist.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         myPlaylistAdapter=new PlaylistMainAdapter(Playlists.getContext(), myPlaylist);
         MyPlaylist.setAdapter(myPlaylistAdapter);
+
+
+        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                            if (results != null && !results.isEmpty()) {
+                                String recognizedText = results.get(0);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("search", recognizedText);
+                                CaNhanFragment caNhanFragment=new CaNhanFragment();
+                                caNhanFragment.setArguments(bundle);
+                                // Xử lý văn bản đã nhận dạng ở đây
+                                replaceFragment(caNhanFragment);
+                            }
+                            // Xử lý dữ liệu trả về ở đây
+                        }
+                    }
+                });
+
+
+
+        MicroIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói gì đó...");
+                someActivityResultLauncher.launch(intent);
+            }
+        });
 
         UserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -218,4 +267,12 @@ public class TrangChuFragment extends Fragment {
 
         return view;
     }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame_layout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }
