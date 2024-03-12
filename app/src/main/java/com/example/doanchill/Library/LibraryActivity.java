@@ -8,8 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
+import com.SettingAcc.SettingAccActivity;
 import com.example.doanchill.Adapters.SongsAdapter;
 import com.example.doanchill.Class.Song;
 import com.example.doanchill.Class.Users;
@@ -34,6 +39,8 @@ public class LibraryActivity extends AppCompatActivity {
 
     List<Song> songArrayList;
     ListView lvLibrary;
+    ImageView back;
+    Button phatNgauNhien;
     SongsAdapter songsAdapter;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference ref=db.collection("library");
@@ -44,6 +51,14 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
         lvLibrary=findViewById(R.id.lvLibrary);
+        back=findViewById(R.id.btnBack1);
+        phatNgauNhien=findViewById(R.id.phatNgauNhienLibrary);
+        //FilterStart
+        Spinner dropdown = findViewById(R.id.spinner1);
+        String[] items = new String[]{"Tên bài hát (A-Z)", "Tên nghệ sĩ (A-Z)"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+        //FilterEnd
 
         songArrayList = new ArrayList<>();
 
@@ -96,6 +111,36 @@ public class LibraryActivity extends AppCompatActivity {
                 startActivity(openMusicPlayer);
             }
         });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        phatNgauNhien.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Xu Ly Phat Ngau Nhien
+
+            }
+        });
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                // Xử lý item được chọn
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Xử lý khi item không được chọn
+            }
+        });
+
     }
     public void showAllSongs() {
         songsAdapter.searchSongLst((ArrayList<Song>) songArrayList);
