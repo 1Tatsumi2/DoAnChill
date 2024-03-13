@@ -38,6 +38,7 @@ public class SettingAccActivity extends AppCompatActivity {
     ListenerRegistration registration;
     TextView verfiyNofi,userName,emailUser;
     String userID,name,email,imageUrl,role;
+    Boolean premium;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class SettingAccActivity extends AppCompatActivity {
                 email=(value.getString("email"));
                 imageUrl=value.getString("image");
                 role=value.getString("role");
+                premium=value.getBoolean("premium");
                 userName.setText(name);
                 emailUser.setText(email);
                 Glide.with(SettingAccActivity.this).load(imageUrl).into(image);
@@ -98,6 +100,7 @@ public class SettingAccActivity extends AppCompatActivity {
                 i.putExtra("email",email);
                 i.putExtra("image",imageUrl);
                 i.putExtra("role",role);
+                i.putExtra("premium",premium);
                 registration.remove();
                 startActivity(i);
                 finish();

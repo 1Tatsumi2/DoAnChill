@@ -15,7 +15,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,10 +53,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
     CircleImageView editImage;
     Button saveBtn;
-    String name, email, imageUrl,oldEmail;
+    String name, email, imageUrl,oldEmail,oldImage;
     EditText editName,editEmail;
     Uri uriImage;
-    boolean isImageUpdated = false;
+    boolean isImageUpdated = false,premium;
     String role;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
@@ -74,9 +76,11 @@ public class EditProfileActivity extends AppCompatActivity {
             name=bundle.getString("name");
             email=bundle.getString("email");
             oldEmail=bundle.getString("email");
-            imageUrl=bundle.getString("image");
+            oldImage=bundle.getString("image");
             role=bundle.getString("role");
+            premium=bundle.getBoolean("premium");
         }
+        imageUrl=oldImage;
         editEmail=findViewById(R.id.editUserEmail);
         editName=findViewById(R.id.editUsername);
         editImage=findViewById(R.id.editUserImage);
@@ -145,44 +149,68 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditProfileActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        if (isImageUpdated)
+        email=editEmail.getText().toString();
+        name=editName.getText().toString();
+        if(TextUtils.isEmpty(name))
         {
-            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
-                    .child(uriImage.getLastPathSegment());
-            storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            imageUrl = uri.toString();
-                            UpdateData();
-                            dialog.dismiss();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                        }
-                    });
-                }
-            });
+            editName.setError("Name cannot be empty");
+            return;
         }
-        else
+        if(TextUtils.isEmpty(email))
         {
-            UpdateData();
+            editEmail.setError("Artist cannot be empty");
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+        {
+            editEmail.setError("Please enter the valid email");
+            return;
+        }
+        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(name))
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditProfileActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
+            if (isImageUpdated && uriImage!=null)
+            {
+                StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
+                        .child(uriImage.getLastPathSegment());
+                storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+                        uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imageUrl = uri.toString();
+                                UpdateData();
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                UpdateData();
+            }
         }
     }
 
     private void UpdateData() {
         email=editEmail.getText().toString();
         name=editName.getText().toString();
+        if(uriImage==null)
+        {
+            imageUrl=oldImage;
+        }
         if(Objects.equals(email, oldEmail))
         {
             DocumentReference documentReference=fStore.collection("users").document(user.getUid());
@@ -191,9 +219,11 @@ public class EditProfileActivity extends AppCompatActivity {
             edited.put("fName",name);
             edited.put("image",imageUrl);
             edited.put("role",role);
+            edited.put("premium",premium);
             documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
+                    Toast.makeText(EditProfileActivity.this, "Update success", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(EditProfileActivity.this, SettingAccActivity.class));
                     finish();
                 }
@@ -211,6 +241,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     edited.put("fName",name);
                     edited.put("image",imageUrl);
                     edited.put("role",role);
+                    edited.put("premium",premium);
                     documentReference.set(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {

@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -227,32 +228,51 @@ public class AddPlaylistActivity extends AppCompatActivity {
         cameraLauncher.launch(intent);
     }
     private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(AddPlaylistActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Playlist Images")
-                .child(uriImage.getLastPathSegment());
-                storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uria) {
-                        imageUrl = uria.toString();
-                        dialog.dismiss();
-                        UploadData();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
+        String names=name.getText().toString();
+        String descs=desc.getText().toString();
+        if(TextUtils.isEmpty(names))
+        {
+            name.setError("Name cannot be empty");
+            return;
+        }
+        if(TextUtils.isEmpty(descs))
+        {
+            desc.setError("Description cannot be empty");
+            return;
+        }
+        if(uriImage==null)
+        {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        }
+        if(!TextUtils.isEmpty(descs) && !TextUtils.isEmpty(names) && uriImage!=null )
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(AddPlaylistActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
+            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Playlist Images")
+                    .child(uriImage.getLastPathSegment());
+            storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uria) {
+                            imageUrl = uria.toString();
+                            dialog.dismiss();
+                            UploadData();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void UploadData() {

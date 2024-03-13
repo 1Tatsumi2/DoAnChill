@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -233,44 +234,62 @@ public class EditPlaylistActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditPlaylistActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        if(isImageUpdated)
+        String nameEdit=names.getText().toString();
+        String descs=desc.getText().toString();
+        if(TextUtils.isEmpty(nameEdit))
         {
-            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Playlist Images")
-                    .child(uriImage.getLastPathSegment());
-            storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            imageUrl = uri.toString();
-                            UpdateData();
-                            dialog.dismiss();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                        }
-                    });
-                }
-            });
+            names.setError("Name cannot be empty");
+            return;
         }
-        else
+        if(TextUtils.isEmpty(descs))
         {
-            UpdateData();
+            desc.setError("Description cannot be empty");
+            return;
+        }
+        if(!TextUtils.isEmpty(descs) && !TextUtils.isEmpty(nameEdit))
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditPlaylistActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
+            if(isImageUpdated && uriImage!=null)
+            {
+                StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Playlist Images")
+                        .child(uriImage.getLastPathSegment());
+                storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+                        uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imageUrl = uri.toString();
+                                UpdateData();
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                UpdateData();
+            }
         }
     }
 
     private void UpdateData() {
+        if(uriImage==null)
+        {
+            imageUrl=oldImageUrl;
+        }
        Playlist playlist=new Playlist(names.getText().toString(),desc.getText().toString(),publicSwitch.isChecked(),imageUrl,classified);
-        Log.d("SOSS",desc.getText() + " " + names.getText() + " " +publicSwitch.isChecked() + " "+imageUrl +" "+classified);
         Map<String, Object> playlistMap = new HashMap<>();
         playlistMap.put("name", playlist.getName());
         playlistMap.put("description", playlist.getDescription());
