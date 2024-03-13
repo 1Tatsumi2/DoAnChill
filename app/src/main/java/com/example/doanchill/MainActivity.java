@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.doanchill.Fragments.CaNhanFragment;
+import com.example.doanchill.Fragments.Fragment_SubMain;
 import com.example.doanchill.Fragments.SettingUserFragment;
 import com.example.doanchill.Fragments.SettingsFragment;
 import com.example.doanchill.Fragments.TrangChuFragment;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
         setContentView(binding.getRoot());
         replaceFragment(new TrangChuFragment());
+        reSupportFragment(new Fragment_SubMain());
         binding.bottomView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
                 registration.remove();
@@ -156,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
             });
     }
 
+    private void reSupportFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.sup_Main_framelayout, fragment);
+        fragmentTransaction.commit();
+    }
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
