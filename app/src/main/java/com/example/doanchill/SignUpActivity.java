@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,7 +92,6 @@ public class SignUpActivity extends AppCompatActivity {
                             image.setImageURI(uriImage);
                         }
                         else {
-                            Toast.makeText(SignUpActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -152,9 +152,19 @@ public class SignUpActivity extends AppCompatActivity {
         String pass=Password.getText().toString().trim();
         String comfirm =Confirmpass.getText().toString().trim();
         String name=Username.getText().toString().trim();
+        if(TextUtils.isEmpty(name))
+        {
+            Username.setError("Name cannot be empty");
+            return;
+        }
         if(TextUtils.isEmpty(user))
         {
             Email.setError("Email cannot be empty");
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(user).matches())
+        {
+            Email.setError("Please enter the valid email");
             return;
         }
         if(TextUtils.isEmpty(pass))
@@ -172,11 +182,17 @@ public class SignUpActivity extends AppCompatActivity {
             Confirmpass.setError("Password and Confirm password must equal");
             return;
         }
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(SignUpActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
+        if(uriImage==null)
+        {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        }
+        if(uriImage != null && !TextUtils.isEmpty(comfirm) && !TextUtils.isEmpty(user) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(name))
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(SignUpActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
             StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("User Images")
                     .child(uriImage.getLastPathSegment());
             storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -213,6 +229,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Void unused) {
                                                         startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                                                        finish();
                                                     }
                                                 });
                                             }
@@ -233,6 +250,7 @@ public class SignUpActivity extends AppCompatActivity {
                     });
                 }
             });
+        }
         }
     @Override
     public void onBackPressed() {

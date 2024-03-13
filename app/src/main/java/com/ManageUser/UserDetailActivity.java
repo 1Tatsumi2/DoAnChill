@@ -19,6 +19,7 @@ import com.example.doanchill.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -59,6 +60,17 @@ public class UserDetailActivity extends AppCompatActivity {
             changeRole.setVisibility(View.GONE);
             changePremium.setVisibility(View.GONE);
         }
+        DocumentReference currentRef=fStore.collection("users").document(fAuth.getCurrentUser().getUid());
+        currentRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(Objects.equals(documentSnapshot.getString("role"), "Moderator") && Objects.equals(users1.getRole(), "Moderator"))
+                {
+                    changeRole.setVisibility(View.GONE);
+                    changePremium.setVisibility(View.GONE);
+                }
+            }
+        });
         changeRole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

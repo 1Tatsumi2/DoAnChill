@@ -16,6 +16,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,7 +88,6 @@ public class UpdateActivity extends AppCompatActivity {
                             updateImage.setImageURI(uriImage);
                         }
                         else {
-                            Toast.makeText(UpdateActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -105,7 +105,6 @@ public class UpdateActivity extends AppCompatActivity {
                             file.setText("File selected");
                         }
                         else {
-                            Toast.makeText(UpdateActivity.this,"No File selected",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -185,98 +184,119 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(UpdateActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        if(isAudioUpdated && isImageUpdated)
+        String nameUpdate=name.getText().toString();
+        String artistUpdate=artist.getText().toString();
+        String singerUpdate=singer.getText().toString();
+        if(TextUtils.isEmpty(nameUpdate))
         {
-            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
-                    .child(uriImage.getLastPathSegment());
-            StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
-                    .child(uriAu.getLastPathSegment());
-
-            UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
-            UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
-
-            uploadTaskImg.continueWithTask(task -> {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return storageReferenceImg.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    imageUrl = task.getResult().toString();
-
-                    uploadTaskAu.continueWithTask(taskAu -> {
-                        if (!taskAu.isSuccessful()) {
-                            throw taskAu.getException();
-                        }
-                        return storageReferenceAu.getDownloadUrl();
-                    }).addOnCompleteListener(taskAu -> {
-                        if (taskAu.isSuccessful()) {
-                            audioUrl = taskAu.getResult().toString();
-
-                            // Call UploadData() only when both download URLs have been retrieved
-                            dialog.dismiss();
-                            UpdateData();
-                        }
-                    });
-                }
-            });
+            name.setError("Song name cannot be empty");
+            return;
         }
-        else if (isAudioUpdated) {
-            StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
-                    .child(uriAu.getLastPathSegment());
-            storageReferenceAu.putFile(uriAu).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            audioUrl = uri.toString();
-                            UpdateData();
-                            dialog.dismiss();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                        }
-                    });
-                }
-            });
-
-        }
-        else if (isImageUpdated)
+        if(TextUtils.isEmpty(artistUpdate))
         {
-            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
-                    .child(uriImage.getLastPathSegment());
-            storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            imageUrl = uri.toString();
-                            UpdateData();
-                            dialog.dismiss();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            dialog.dismiss();
-                        }
-                    });
-                }
-            });
+            artist.setError("Artist cannot be empty");
+            return;
         }
-        else
+        if(TextUtils.isEmpty(singerUpdate))
         {
-            UpdateData();
+            singer.setError("Singer cannot be empty");
+            return;
+        }
+        if(!TextUtils.isEmpty(nameUpdate) && !TextUtils.isEmpty(artistUpdate) && !TextUtils.isEmpty(singerUpdate))
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(UpdateActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
+            if((isAudioUpdated && isImageUpdated)&&(uriImage!=null && uriAu!=null))
+            {
+                StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
+                        .child(uriImage.getLastPathSegment());
+                StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
+                        .child(uriAu.getLastPathSegment());
+
+                UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
+                UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
+
+                uploadTaskImg.continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return storageReferenceImg.getDownloadUrl();
+                }).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        imageUrl = task.getResult().toString();
+
+                        uploadTaskAu.continueWithTask(taskAu -> {
+                            if (!taskAu.isSuccessful()) {
+                                throw taskAu.getException();
+                            }
+                            return storageReferenceAu.getDownloadUrl();
+                        }).addOnCompleteListener(taskAu -> {
+                            if (taskAu.isSuccessful()) {
+                                audioUrl = taskAu.getResult().toString();
+
+                                // Call UploadData() only when both download URLs have been retrieved
+                                dialog.dismiss();
+                                UpdateData();
+                            }
+                        });
+                    }
+                });
+            }
+            else if (isAudioUpdated && uriAu!=null) {
+                StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
+                        .child(uriAu.getLastPathSegment());
+                storageReferenceAu.putFile(uriAu).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+                        uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                audioUrl = uri.toString();
+                                UpdateData();
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+
+            }
+            else if (isImageUpdated && uriImage!=null)
+            {
+                StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
+                        .child(uriImage.getLastPathSegment());
+                storageReferenceImg.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+                        uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imageUrl = uri.toString();
+                                UpdateData();
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                UpdateData();
+            }
         }
     }
 
@@ -285,7 +305,23 @@ public class UpdateActivity extends AppCompatActivity {
         String artistUpdate=artist.getText().toString();
         String albumUpdate="";
         String singerUpdate=singer.getText().toString();
-        if(isAudioUpdated)
+        if((isAudioUpdated && isImageUpdated)&& uriImage==null)
+        {
+            imageUrl=oldImageUrl;
+        }
+        if((isAudioUpdated && isImageUpdated) && uriAu==null)
+        {
+            audioUrl=oldAudioUrl;
+        }
+        if(isAudioUpdated && uriAu==null)
+        {
+            audioUrl=oldAudioUrl;
+        }
+        if(isImageUpdated && uriImage==null)
+        {
+            imageUrl=oldImageUrl;
+        }
+        if(isAudioUpdated && uriAu!=null)
         {
             mediaPlayer= MediaPlayer.create(UpdateActivity.this,uriAu);
             duration = mediaPlayer.getDuration();
@@ -301,6 +337,7 @@ public class UpdateActivity extends AppCompatActivity {
                     finish();
             }
         });
+        //các thao tác xóa file cũ
     }
 
     private void imagePickDialog() {

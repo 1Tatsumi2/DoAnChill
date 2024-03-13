@@ -16,6 +16,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -165,44 +166,74 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(UploadActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        android.app.AlertDialog dialog= builder.create();
-        dialog.show();
-        StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
-                .child(uriImage.getLastPathSegment());
-        StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
-                .child(uriAu.getLastPathSegment());
+        String name=uploadName.getText().toString();
+        String artist=uploadArtist.getText().toString();
+        String album="";
+        String singer=uploadSinger.getText().toString();
+        if(TextUtils.isEmpty(name))
+        {
+            uploadName.setError("Song name cannot be empty");
+            return;
+        }
+        if(TextUtils.isEmpty(artist))
+        {
+            uploadArtist.setError("Artist cannot be empty");
+            return;
+        }
+        if(TextUtils.isEmpty(singer))
+        {
+            uploadSinger.setError("Singer cannot be empty");
+            return;
+        }
+        if(uriAu==null)
+        {
+            Toast.makeText(this, "No audio selected", Toast.LENGTH_SHORT).show();
+        }
+        if(uriImage==null)
+        {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+        }
+        if(uriImage!=null && uriAu!=null && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(artist) && !TextUtils.isEmpty(singer))
+        {
+            android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(UploadActivity.this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            android.app.AlertDialog dialog= builder.create();
+            dialog.show();
+            StorageReference storageReferenceImg = FirebaseStorage.getInstance().getReference().child("Android Images")
+                    .child(uriImage.getLastPathSegment());
+            StorageReference storageReferenceAu = FirebaseStorage.getInstance().getReference().child("Audio")
+                    .child(uriAu.getLastPathSegment());
 
-        UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
-        UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
+            UploadTask uploadTaskImg = storageReferenceImg.putFile(uriImage);
+            UploadTask uploadTaskAu = storageReferenceAu.putFile(uriAu);
 
-        uploadTaskImg.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw task.getException();
-            }
-            return storageReferenceImg.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                imageUrl = task.getResult().toString();
+            uploadTaskImg.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return storageReferenceImg.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    imageUrl = task.getResult().toString();
 
-                uploadTaskAu.continueWithTask(taskAu -> {
-                    if (!taskAu.isSuccessful()) {
-                        throw taskAu.getException();
-                    }
-                    return storageReferenceAu.getDownloadUrl();
-                }).addOnCompleteListener(taskAu -> {
-                    if (taskAu.isSuccessful()) {
-                        audioUrl = taskAu.getResult().toString();
+                    uploadTaskAu.continueWithTask(taskAu -> {
+                        if (!taskAu.isSuccessful()) {
+                            throw taskAu.getException();
+                        }
+                        return storageReferenceAu.getDownloadUrl();
+                    }).addOnCompleteListener(taskAu -> {
+                        if (taskAu.isSuccessful()) {
+                            audioUrl = taskAu.getResult().toString();
 
-                        // Call UploadData() only when both download URLs have been retrieved
-                        dialog.dismiss();
-                        UploadData();
-                    }
-                });
-            }
-        });
+                            // Call UploadData() only when both download URLs have been retrieved
+                            dialog.dismiss();
+                            UploadData();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void UploadData() {
