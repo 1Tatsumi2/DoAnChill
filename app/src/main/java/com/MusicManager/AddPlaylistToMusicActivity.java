@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AddPlaylistToMusicActivity extends AppCompatActivity {
 
@@ -70,7 +71,7 @@ public class AddPlaylistToMusicActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                           String name=documentSnapshot.getId();
-                          if(name.equals(UserID))
+                          if(name.equals(UserID)&& Objects.equals(playlist.getClassified(), "My Playlist"))
                           {
                               playlistList.add(playlist);
                               playlistAdapter.notifyDataSetChanged();

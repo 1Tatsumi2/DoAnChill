@@ -201,6 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         users.put("email",user);
                                         users.put("image",imageUrl);
                                         users.put("role","User");
+                                        users.put("premium",false);
                                         documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
