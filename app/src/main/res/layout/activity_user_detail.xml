@@ -30,7 +30,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detailUserImage">
-
     </TextView>
 
     <TextView
@@ -38,49 +37,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="27dp"
+        android:layout_marginTop="104dp"
         android:text="Baby Slow Down"
         android:textAllCaps="true"
         android:textColor="#fff"
         android:textSize="23sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
-        app:layout_constraintTop_toBottomOf="@+id/tenUser" />
+        app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
     <TextView
         android:id="@+id/detailEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="110dp"
+        android:layout_marginTop="188dp"
         android:text="Unknown"
         android:textAllCaps="true"
         android:textColor="#fff"
-        android:textSize="23sp"
+        android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
-        app:layout_constraintTop_toBottomOf="@+id/tenGmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
     <TextView
         android:id="@+id/yesNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="110dp"
+        android:layout_marginTop="264dp"
         android:text="YES / NO"
         android:textAllCaps="true"
         android:textColor="#fff"
         android:textSize="23sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
-        app:layout_constraintTop_toBottomOf="@+id/tenGmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
     <TextView
         android:id="@+id/tittleQuanLyUser"
@@ -119,12 +111,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginTop="66dp"
-        android:layout_marginEnd="123dp"
         android:text="Tài khoản: "
         android:textAllCaps="true"
         android:textColor="#fff"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
         app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
@@ -133,31 +123,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="123dp"
+        android:layout_marginTop="225dp"
         android:text="PREMIUM: "
         android:textAllCaps="true"
         android:textColor="#fff"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
-        app:layout_constraintTop_toBottomOf="@+id/detailEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
     <TextView
         android:id="@+id/tenGmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="161dp"
+        android:layout_marginTop="154dp"
         android:text="Gmail: "
         android:textAllCaps="true"
         android:textColor="#fff"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detailUserImage"
-        app:layout_constraintTop_toBottomOf="@+id/DetailName" />
+        app:layout_constraintTop_toBottomOf="@+id/tittleQuanLyUser" />
 
     <ImageView
         android:id="@+id/detailUserImage"
