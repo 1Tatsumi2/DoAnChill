@@ -52,7 +52,8 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditPlaylistActivity extends AppCompatActivity {
+public class
+EditPlaylistActivity extends AppCompatActivity {
 
     EditText names, desc;
     Spinner spinner;
