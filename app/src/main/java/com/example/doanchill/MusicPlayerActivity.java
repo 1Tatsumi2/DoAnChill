@@ -525,8 +525,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
     }
     public void showNotification(int playPauseBtn, Float playbackSpeed)
     {
-        Intent intent=new Intent(this,MusicPlayerActivity.class);
-        PendingIntent contentIntent=PendingIntent.getActivity(this,0,intent, PendingIntent.FLAG_IMMUTABLE);
         Intent prevIntent=new Intent(this, NotificationReceiver.class).setAction(ACTION_PREV);
         PendingIntent prevPendingIntent=PendingIntent.getBroadcast(this,0,prevIntent,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         Intent playIntent=new Intent(this,NotificationReceiver.class).setAction(ACTION_PLAY);
@@ -550,7 +548,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements ActionPlay
                                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                                         .setMediaSession(mediaSession.getSessionToken()))
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setContentIntent(contentIntent)
                                 .setOnlyAlertOnce(true)
                                 .build();
                         NotificationManager notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

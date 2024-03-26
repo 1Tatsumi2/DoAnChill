@@ -158,13 +158,17 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         if(TextUtils.isEmpty(email))
         {
-            editEmail.setError("Artist cannot be empty");
+            editEmail.setError("Email cannot be empty");
             return;
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
         {
             editEmail.setError("Please enter the valid email");
             return;
+        }
+        if(uriImage==null)
+        {
+            imageUrl=oldImage;
         }
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(name))
         {

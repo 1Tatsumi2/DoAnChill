@@ -19,17 +19,6 @@
         app:menu="@menu/bottom_nav_menu" >
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-
-
-
-        <!-- TextView hiển thị tên bài hát và tác giả -->
-
-        <!-- Biểu tượng skip bài hát -->
-
-        <!-- Biểu tượng quay lại bài hát trước đó -->
-
-
     <FrameLayout
         android:id="@+id/main_frame_layout"
         android:layout_width="match_parent"

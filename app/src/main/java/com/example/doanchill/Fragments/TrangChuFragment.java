@@ -212,6 +212,9 @@ public class TrangChuFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         playlistList.clear();
                         playlistsTop100.clear();
+                        playlistsTopSinger.clear();
+                        myPlaylist.clear();
+                        explorePlaylist.clear();
                         for (QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                         {
                             if(Objects.equals(documentSnapshot.getString("classified"), "Playlist"))

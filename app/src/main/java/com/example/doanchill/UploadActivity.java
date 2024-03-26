@@ -188,10 +188,12 @@ public class UploadActivity extends AppCompatActivity {
         if(uriAu==null)
         {
             Toast.makeText(this, "No audio selected", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(uriImage==null)
         {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(uriImage!=null && uriAu!=null && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(artist) && !TextUtils.isEmpty(singer))
         {

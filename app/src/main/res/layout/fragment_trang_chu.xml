@@ -25,7 +25,7 @@
             android:id="@+id/khamPha"
             android:layout_width="179dp"
             android:layout_height="wrap_content"
-            android:text=" Khám phá"
+            android:text=" Explore >"
             android:textColor="#FFFFFF"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="20dp"
-                android:text=" Đáng chú ý"
+                android:text=" Discover >"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -128,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" PlayList"
+            android:text=" PlayList >"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
@@ -147,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" Top 100"
+            android:text=" Top 100 >"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
@@ -202,7 +202,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" Top nghệ sĩ được yêu thích nhất "
+            android:text=" Top Singer >"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">
@@ -222,7 +222,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=" Playlist của bạn "
+            android:text=" My playlist >"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold">

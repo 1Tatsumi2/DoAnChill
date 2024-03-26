@@ -243,6 +243,7 @@ public class AddPlaylistActivity extends AppCompatActivity {
         if(uriImage==null)
         {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(!TextUtils.isEmpty(descs) && !TextUtils.isEmpty(names) && uriImage!=null )
         {

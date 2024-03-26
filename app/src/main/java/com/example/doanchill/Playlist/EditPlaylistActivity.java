@@ -247,6 +247,10 @@ EditPlaylistActivity extends AppCompatActivity {
             desc.setError("Description cannot be empty");
             return;
         }
+        if(uriImage==null)
+        {
+            imageUrl=oldImageUrl;
+        }
         if(!TextUtils.isEmpty(descs) && !TextUtils.isEmpty(nameEdit))
         {
             android.app.AlertDialog.Builder builder=new android.app.AlertDialog.Builder(EditPlaylistActivity.this);

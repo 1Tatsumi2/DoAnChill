@@ -120,6 +120,7 @@ public class LibraryActivity extends AppCompatActivity {
                 openMusicPlayer.putExtra("key",song.getKey());
                 openMusicPlayer.putExtra("position",originalPosition);
                 startActivity(openMusicPlayer);
+                finish();
             }
         });
 
@@ -144,6 +145,7 @@ public class LibraryActivity extends AppCompatActivity {
                 openMusicPlayer.putExtra("key",song.getKey());
                 openMusicPlayer.putExtra("position",originalPosition);
                 startActivity(openMusicPlayer);
+                finish();
             }
         });
 

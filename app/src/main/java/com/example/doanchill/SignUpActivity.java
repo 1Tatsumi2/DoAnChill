@@ -143,6 +143,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignUpActivity.this,SignInActivity.class));
+                finish();
             }
         });
     }
@@ -185,6 +186,7 @@ public class SignUpActivity extends AppCompatActivity {
         if(uriImage==null)
         {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(uriImage != null && !TextUtils.isEmpty(comfirm) && !TextUtils.isEmpty(user) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(name))
         {

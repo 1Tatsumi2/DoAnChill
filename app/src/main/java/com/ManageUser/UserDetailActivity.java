@@ -30,7 +30,7 @@ import java.util.Objects;
 public class UserDetailActivity extends AppCompatActivity {
 
     Button changeRole,changePremium;
-    TextView detailName, detailEmail, detailRole;
+    TextView detailName, detailEmail, detailRole,yesNo;
     ImageView detailImage;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -45,12 +45,20 @@ public class UserDetailActivity extends AppCompatActivity {
         detailImage=findViewById(R.id.detailUserImage);
         changeRole=findViewById(R.id.changeRole);
         changePremium=findViewById(R.id.changePremium);
+        yesNo=findViewById(R.id.yesNo);
         fAuth=FirebaseAuth.getInstance();
         fStore=FirebaseFirestore.getInstance();
         Intent intent=getIntent();
         Bundle extraData=intent.getExtras();
         Users users1=(Users) extraData.getSerializable("user");
         key=extraData.getString("key");
+        if(users1.getPremium())
+        {
+            yesNo.setText("Active");
+        }
+        else {
+            yesNo.setText("No");
+        }
         detailName.setText(users1.getfName());
         detailEmail.setText(users1.getEmail());
         detailRole.setText(users1.getRole());
